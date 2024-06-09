@@ -1,4 +1,5 @@
 package by.tms.pizzaapp.entity.user;
 
-public class UserRole {
+public enum UserRole {
+    ADMIN, CLIENT
 }

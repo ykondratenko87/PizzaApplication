@@ -1,14 +1,16 @@
 package by.tms.pizzaapp.service.user;
 
-import by.tms.pizzaapp.dto.user.UserRegistrationRequest;
-import by.tms.pizzaapp.dto.user.UserResponse;
-import by.tms.pizzaapp.entity.user.User;
-import by.tms.pizzaapp.entity.user.UserRole;
+import by.tms.pizzaapp.dto.user.*;
+import by.tms.pizzaapp.entity.user.*;
 import by.tms.pizzaapp.mapper.UserRegistrationMapper;
 import by.tms.pizzaapp.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -34,5 +36,23 @@ public class UserServiceImpl implements UserService {
 
         User savedUser = userRepository.save(user);
         return userRegistrationMapper.toResponse(savedUser);
+    }
+
+    @Override
+//    @PreAuthorize("hasAuthority('ADMIN')")
+    public List<UserResponse> getAllUsers() {
+        return userRepository.findAll().stream().map(userRegistrationMapper::toResponse).collect(Collectors.toList());
+    }
+
+    @Override
+    public Page<UserResponse> getAllUsersWithPagination(Pageable pageable) {
+        Page<User> userPage = userRepository.findAll(pageable);
+        return new PageImpl<>(
+                userPage.getContent().stream()
+                        .map(userRegistrationMapper::toResponse)
+                        .collect(Collectors.toList()),
+                pageable,
+                userPage.getTotalElements()
+        );
     }
 }

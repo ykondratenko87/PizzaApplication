@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -39,6 +40,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserResponse loginUser(UserLoginRequest userLoginRequest) {
+        Optional<User> optionalUser = userRepository.findByLogin(userLoginRequest.getLogin());
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            if (userLoginRequest.getPassword().equals(user.getPassword())) {
+                return userRegistrationMapper.toResponse(user);
+            } else {
+                throw new IllegalArgumentException("Invalid password");
+            }
+        } else {
+            throw new IllegalArgumentException("User not found");
+        }
+    }
+
+    @Override
 //    @PreAuthorize("hasAuthority('ADMIN')")
     public List<UserResponse> getAllUsers() {
         return userRepository.findAll().stream().map(userRegistrationMapper::toResponse).collect(Collectors.toList());
@@ -54,5 +70,42 @@ public class UserServiceImpl implements UserService {
                 pageable,
                 userPage.getTotalElements()
         );
+    }
+
+    @Override
+    public UserResponse getUserById(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+        return userRegistrationMapper.toResponse(user);
+    }
+
+    @Override
+    public void deleteUserById(Long id) {
+        if (userRepository.existsById(id)) {
+            userRepository.deleteById(id);
+        } else {
+            throw new IllegalArgumentException("User not found");
+        }
+    }
+
+    @Override
+    public UserResponse updateUser(Long id, UserRegistrationRequest userRequest) {
+        User existingUser = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        existingUser.setName(userRequest.getName());
+        existingUser.setSurname(userRequest.getSurname());
+        existingUser.setLogin(userRequest.getLogin());
+        existingUser.setPassword(userRequest.getPassword());
+
+        User updatedUser = userRepository.save(existingUser);
+        return userRegistrationMapper.toResponse(updatedUser);
+    }
+
+    @Override
+    public UserResponse getUserByLogin(String login) {
+        User user = userRepository.findByLogin(login)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+        return userRegistrationMapper.toResponse(user);
     }
 }

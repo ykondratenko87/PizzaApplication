@@ -27,14 +27,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponse registerUser(UserRegistrationRequest userRequest) {
+        Optional<User> existingUser = userRepository.findByLogin(userRequest.getLogin());
+        if (existingUser.isPresent()) {
+            throw new IllegalArgumentException("User with this login already exists");
+        }
         User user = userRegistrationMapper.toEntity(userRequest);
-
         if (userRepository.count() == 0) {
             user.setRole(UserRole.ADMIN);
         } else {
             user.setRole(UserRole.CLIENT);
         }
-
         User savedUser = userRepository.save(user);
         return userRegistrationMapper.toResponse(savedUser);
     }

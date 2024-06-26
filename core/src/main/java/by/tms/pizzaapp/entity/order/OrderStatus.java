@@ -1,4 +1,5 @@
 package by.tms.pizzaapp.entity.order;
 
-public class OrderStatus {
+public enum OrderStatus {
+    ORDERING, COMPLETED, CANCELED
 }

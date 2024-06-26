@@ -6,10 +6,10 @@ import java.time.LocalDate;
 
 @Data
 public class OrderResponse {
-    private long id;
-    private double pizzaPrice;
+    private Long id;
+    private double totalPrice;
     private LocalDate orderDate;
     private String status;
-    private long userId;
+    private Long userId;
     private String address;
 }

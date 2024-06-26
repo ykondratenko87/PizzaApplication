@@ -13,15 +13,13 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "pizza_price", nullable = false)
-    private double pizzaPrice;
-    @Column(name = "order_date", nullable = false)
-    private LocalDate orderDate;
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
-    @Column(nullable = false)
     private String address;
+    private double totalPrice;
+    @Column(name = "order_date", nullable = false)
+    private LocalDate orderDate;
 }

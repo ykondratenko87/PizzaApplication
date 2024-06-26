@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @Data
 public class OrderRequest {
     @Positive(message = "Pizza price must be positive")
-    private double pizzaPrice;
+    private double totalPrice;
     @NotNull(message = "Order date cannot be null")
     private LocalDate orderDate;
     @NotBlank(message = "Status cannot be blank")
@@ -21,7 +21,7 @@ public class OrderRequest {
     private String status;
     @NotNull(message = "User ID cannot be null")
     @Positive(message = "User ID must be positive")
-    private long userId;
+    private Long userId;
     @NotBlank(message = "Address cannot be blank")
     private String address;
 }

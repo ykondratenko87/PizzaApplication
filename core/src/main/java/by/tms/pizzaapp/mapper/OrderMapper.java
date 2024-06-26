@@ -8,9 +8,7 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface OrderMapper {
-    @Mapping(target = "user.id", source = "userId")
     Order toEntity(OrderRequest orderRequest);
 
-    @Mapping(target = "userId", source = "user.id")
     OrderResponse toResponse(Order order);
 }

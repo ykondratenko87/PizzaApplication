@@ -14,14 +14,16 @@ public class Basket {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(nullable = false)
     private Long count;
-    @Column(name = "total_price", nullable = false)
     private double totalPrice;
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinTable(schema = "pizzaapp", name = "basket_pizza", joinColumns = @JoinColumn(name = "basket_id"), inverseJoinColumns = @JoinColumn(name = "pizza_id"))
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(schema = "pizzaapp", name = "basket_pizzas",
+            joinColumns = @JoinColumn(name = "basket_id"),
+            inverseJoinColumns = @JoinColumn(name = "pizza_id"))
     private List<Pizza> pizzas;
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinTable(schema = "pizzaapp", name = "basket_order", joinColumns = @JoinColumn(name = "basket_id"), inverseJoinColumns = @JoinColumn(name = "order_id"))
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(schema = "pizzaapp", name = "basket_orders",
+            joinColumns = @JoinColumn(name = "basket_id"),
+            inverseJoinColumns = @JoinColumn(name = "order_id"))
     private List<Order> orders;
 }

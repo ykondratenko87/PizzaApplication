@@ -4,15 +4,20 @@ import by.tms.pizzaapp.dto.order.OrderRequest;
 import by.tms.pizzaapp.dto.order.OrderResponse;
 import by.tms.pizzaapp.entity.order.Order;
 import by.tms.pizzaapp.entity.order.OrderStatus;
+import by.tms.pizzaapp.entity.pizza.Pizza;
 import by.tms.pizzaapp.exception.OrderNotFoundException;
 import by.tms.pizzaapp.exception.UserNotFoundException;
 import by.tms.pizzaapp.mapper.OrderMapper;
 import by.tms.pizzaapp.repository.OrderRepository;
 import by.tms.pizzaapp.repository.BasketRepository;
+import by.tms.pizzaapp.repository.PizzaRepository;
 import by.tms.pizzaapp.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -22,6 +27,7 @@ public class OrderServiceImpl implements OrderService {
     private final UserRepository userRepository;
     private final OrderMapper orderMapper;
     private final BasketRepository basketRepository;
+    private final PizzaRepository pizzaRepository;
 
     @Override
     public OrderResponse checkout(OrderRequest orderRequest) {
@@ -39,6 +45,13 @@ public class OrderServiceImpl implements OrderService {
         currentOrder.setStatus(OrderStatus.IN_DELIVERY);
         currentOrder.setTotalPrice(orderRequest.getTotalPrice());
         currentOrder.setOrderDate(orderRequest.getOrderDate());
+
+        // Добавляем пиццы к заказу
+        List<Pizza> pizzas = orderRequest.getPizzaIds().stream()
+                .map(id -> pizzaRepository.findById(id)
+                        .orElseThrow(() -> new RuntimeException("Pizza not found: " + id)))
+                .collect(Collectors.toList());
+        currentOrder.setPizzas(pizzas);
 
         // Сохраняем изменения
         orderRepository.save(currentOrder);

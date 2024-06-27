@@ -1,8 +1,10 @@
 package by.tms.pizzaapp.dto.order;
 
+import by.tms.pizzaapp.dto.pizza.PizzaResponse;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 public class OrderResponse {
@@ -12,4 +14,5 @@ public class OrderResponse {
     private String status;
     private Long userId;
     private String address;
+    private List<PizzaResponse> pizzas;
 }

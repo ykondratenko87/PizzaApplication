@@ -8,6 +8,7 @@ import jakarta.validation.constraints.Positive;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Schema(description = "Order entity")
 @Data
@@ -24,4 +25,6 @@ public class OrderRequest {
     private Long userId;
     @NotBlank(message = "Address cannot be blank")
     private String address;
+    @NotNull(message = "Pizza IDs cannot be null")
+    private List<Long> pizzaIds;
 }

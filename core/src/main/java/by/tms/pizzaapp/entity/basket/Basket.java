@@ -2,6 +2,7 @@ package by.tms.pizzaapp.entity.basket;
 
 import by.tms.pizzaapp.entity.order.Order;
 import by.tms.pizzaapp.entity.pizza.Pizza;
+import by.tms.pizzaapp.entity.user.User;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -14,7 +15,7 @@ public class Basket {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long count;
+    private long count;
     private double totalPrice;
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(schema = "pizzaapp", name = "basket_pizzas",
@@ -26,4 +27,7 @@ public class Basket {
             joinColumns = @JoinColumn(name = "basket_id"),
             inverseJoinColumns = @JoinColumn(name = "order_id"))
     private List<Order> orders;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }

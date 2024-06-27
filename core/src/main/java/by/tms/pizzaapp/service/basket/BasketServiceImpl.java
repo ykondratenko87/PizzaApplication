@@ -43,6 +43,7 @@ public class BasketServiceImpl implements BasketService {
                     newBasket.setOrders(new ArrayList<>());
                     newBasket.getOrders().add(newOrder);
                     orderRepository.save(newOrder); // Сохранить новый заказ в базу данных
+                    basketRepository.save(newBasket); // Сохранить новую корзину
                     return newBasket;
                 });
 
@@ -57,7 +58,14 @@ public class BasketServiceImpl implements BasketService {
         Order currentOrder = basket.getOrders().stream()
                 .filter(order -> order.getStatus() == OrderStatus.ORDERING)
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("Current ordering order not found"));
+                .orElseGet(() -> {
+                    Order newOrder = createNewOrder(basketRequest.getUserId());
+                    newOrder.setTotalPrice(basket.getTotalPrice());
+                    newOrder.setAddress(""); // Можно установить начальный адрес, если он имеется
+                    basket.getOrders().add(newOrder);
+                    orderRepository.save(newOrder);
+                    return newOrder;
+                });
 
         currentOrder.setTotalPrice(basket.getTotalPrice());
 
@@ -77,16 +85,28 @@ public class BasketServiceImpl implements BasketService {
             basket.getPizzas().remove(pizza);
             updateBasketDetails(basket, -1, -pizza.getPrice());
 
+            // Увеличение количества пиццы в базе данных
+            pizza.setQuantity(pizza.getQuantity() + 1);
+            pizzaRepository.save(pizza); // Сохранить обновленное количество пиццы
+
             // Обновление заказа
             Order currentOrder = basket.getOrders().stream()
                     .filter(order -> order.getStatus() == OrderStatus.ORDERING)
                     .findFirst()
                     .orElseThrow(() -> new RuntimeException("Current ordering order not found"));
 
-            currentOrder.setTotalPrice(basket.getTotalPrice());
-
-            basketRepository.save(basket);
-            orderRepository.save(currentOrder);
+            if (basket.getPizzas().isEmpty()) {
+                // Удалить корзину и заказ, если корзина пуста
+                basket.getOrders().clear(); // Удалить все заказы из корзины
+                orderRepository.delete(currentOrder);
+                basketRepository.delete(basket);
+            } else {
+                currentOrder.setTotalPrice(basket.getTotalPrice());
+                basketRepository.save(basket); // Сохранить изменения в корзине
+                orderRepository.save(currentOrder);
+            }
+        } else {
+            throw new NoSuchElementException("Pizza not found in basket");
         }
 
         return basketMapper.toResponse(basket);

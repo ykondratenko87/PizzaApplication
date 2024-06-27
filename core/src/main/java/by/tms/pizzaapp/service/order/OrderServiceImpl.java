@@ -7,9 +7,8 @@ import by.tms.pizzaapp.entity.order.OrderStatus;
 import by.tms.pizzaapp.exception.OrderNotFoundException;
 import by.tms.pizzaapp.exception.UserNotFoundException;
 import by.tms.pizzaapp.mapper.OrderMapper;
-import by.tms.pizzaapp.mapper.PizzaMapper;
 import by.tms.pizzaapp.repository.OrderRepository;
-import by.tms.pizzaapp.repository.PizzaRepository;
+import by.tms.pizzaapp.repository.BasketRepository;
 import by.tms.pizzaapp.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,7 +21,7 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
     private final OrderMapper orderMapper;
-    private final PizzaRepository pizzaRepository;
+    private final BasketRepository basketRepository;
 
     @Override
     public OrderResponse checkout(OrderRequest orderRequest) {
@@ -43,6 +42,9 @@ public class OrderServiceImpl implements OrderService {
 
         // Сохраняем изменения
         orderRepository.save(currentOrder);
+
+        // Удаляем текущую корзину пользователя
+        basketRepository.deleteByUserId(orderRequest.getUserId());
 
         return orderMapper.toResponse(currentOrder);
     }

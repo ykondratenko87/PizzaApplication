@@ -1,6 +1,5 @@
 package by.tms.pizzaapp.entity.order;
 
-import by.tms.pizzaapp.entity.basket.Basket;
 import by.tms.pizzaapp.entity.pizza.Pizza;
 import by.tms.pizzaapp.entity.user.User;
 import jakarta.persistence.*;

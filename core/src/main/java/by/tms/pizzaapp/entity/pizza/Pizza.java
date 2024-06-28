@@ -1,5 +1,6 @@
 package by.tms.pizzaapp.entity.pizza;
 
+import by.tms.pizzaapp.entity.ingredient.Ingredient;
 import by.tms.pizzaapp.entity.review.Review;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -19,4 +20,12 @@ public class Pizza {
     private int quantity;
     @OneToMany(mappedBy = "pizza", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> reviews;
+
+    @ManyToMany
+    @JoinTable(schema = "pizzaapp", name = "pizza_ingredients",
+            joinColumns = @JoinColumn(name = "pizza_id"),
+            inverseJoinColumns = @JoinColumn(name = "ingredient_id"))
+    private List<Ingredient> ingredients;
+
+    private boolean custom; // Новое поле для кастомных пицц
 }

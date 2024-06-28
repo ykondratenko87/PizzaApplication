@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Slf4j
 @RestController
 @RequestMapping("/orders")
@@ -29,5 +31,25 @@ public class OrderController {
     public OrderResponse getOrderById(@PathVariable Long id) {
         log.info("Get order by ID: {}", id);
         return orderService.getOrderById(id);
+    }
+
+    @Operation(summary = "Clear orders and baskets", description = "Удаляет все заказы со статусом ORDERING и связанные с ними корзины")
+    @DeleteMapping("/clear")
+    public void clearOrdersAndBaskets() {
+        orderService.clearOrdersAndBaskets();
+    }
+
+    @Operation(summary = "Get all orders", description = "Получает все заказы")
+    @GetMapping
+    public List<OrderResponse> getAllOrders() {
+        log.info("Get all orders");
+        return orderService.getAllOrders();
+    }
+
+    @Operation(summary = "Get orders by user ID", description = "Получает заказы по ID пользователя")
+    @GetMapping("/user/{userId}")
+    public List<OrderResponse> getOrdersByUserId(@PathVariable Long userId) {
+        log.info("Get orders by user ID: {}", userId);
+        return orderService.getOrdersByUserId(userId);
     }
 }

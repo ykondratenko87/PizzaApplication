@@ -2,6 +2,7 @@ package by.tms.pizzaapp.service.order;
 
 import by.tms.pizzaapp.dto.order.OrderRequest;
 import by.tms.pizzaapp.dto.order.OrderResponse;
+import by.tms.pizzaapp.entity.basket.Basket;
 import by.tms.pizzaapp.entity.order.Order;
 import by.tms.pizzaapp.entity.order.OrderStatus;
 import by.tms.pizzaapp.entity.pizza.Pizza;
@@ -67,5 +68,44 @@ public class OrderServiceImpl implements OrderService {
         Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Order not found"));
         return orderMapper.toResponse(order);
+    }
+
+    @Override
+    public void clearOrdersAndBaskets() {
+        // Находим все заказы со статусом ORDERING
+        List<Order> orderingOrders = orderRepository.findByStatus(OrderStatus.ORDERING);
+
+        // Обрабатываем каждый заказ
+        orderingOrders.forEach(order -> {
+            Long userId = order.getUser().getId();
+
+            // Получаем корзину пользователя
+            Basket basket = basketRepository.findByUserId(userId)
+                    .orElseThrow(() -> new RuntimeException("Basket not found"));
+
+            // Возвращаем количество пицц на склад
+            basket.getPizzas().forEach(pizza -> {
+                pizza.setQuantity(pizza.getQuantity() + 1);
+                pizzaRepository.save(pizza);
+            });
+
+            // Удаляем корзину и связанные заказы
+            basketRepository.deleteByUserId(userId);
+            orderRepository.delete(order);
+        });
+    }
+
+    @Override
+    public List<OrderResponse> getAllOrders() {
+        return orderRepository.findAll().stream()
+                .map(orderMapper::toResponse)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<OrderResponse> getOrdersByUserId(Long userId) {
+        return orderRepository.findByUserId(userId).stream()
+                .map(orderMapper::toResponse)
+                .collect(Collectors.toList());
     }
 }

@@ -1,5 +1,6 @@
 package by.tms.pizzaapp.entity.order;
 
+import by.tms.pizzaapp.entity.courier.Courier;
 import by.tms.pizzaapp.entity.pizza.Pizza;
 import by.tms.pizzaapp.entity.user.User;
 import jakarta.persistence.*;
@@ -30,4 +31,8 @@ public class Order {
             joinColumns = @JoinColumn(name = "order_id"),
             inverseJoinColumns = @JoinColumn(name = "pizza_id"))
     private List<Pizza> pizzas;
+
+    @ManyToOne
+    @JoinColumn(name = "courier_id")
+    private Courier courier;
 }

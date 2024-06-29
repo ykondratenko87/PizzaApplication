@@ -18,7 +18,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/review")
-@Tag(name = "Review Controller")
+@Tag(name = "Review Controller", description = "Endpoints for managing review controller")
 public class ReviewController {
     private final ReviewService reviewService;
 

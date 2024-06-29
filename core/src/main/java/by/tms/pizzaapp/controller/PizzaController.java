@@ -6,6 +6,7 @@ import by.tms.pizzaapp.service.pizza.PizzaService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -18,7 +19,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/pizzas")
-@Tag(name = "Pizza Controller")
+@Tag(name = "Pizza Controller", description = "Endpoints for managing pizza controller")
 public class PizzaController {
     private final PizzaService pizzaService;
 

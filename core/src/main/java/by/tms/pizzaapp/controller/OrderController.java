@@ -14,7 +14,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/orders")
-@Tag(name = "Order Controller")
+@Tag(name = "Order Controller", description = "Endpoints for managing order controller")
 @RequiredArgsConstructor
 public class OrderController {
     private final OrderService orderService;
@@ -36,6 +36,7 @@ public class OrderController {
     @Operation(summary = "Clear orders and baskets", description = "Удаляет все заказы со статусом ORDERING и связанные с ними корзины")
     @DeleteMapping("/clear")
     public void clearOrdersAndBaskets() {
+        log.info("Clearing all orders and baskets");
         orderService.clearOrdersAndBaskets();
     }
 

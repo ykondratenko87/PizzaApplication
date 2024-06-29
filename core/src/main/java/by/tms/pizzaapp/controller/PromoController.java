@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController
 @RequestMapping("/promos")
-@Tag(name = "Promo Controller")
+@Tag(name = "Promo Controller", description = "Endpoints for managing promo controller")
 @RequiredArgsConstructor
 public class PromoController {
     private final PromoService promoService;

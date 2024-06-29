@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController
 @RequestMapping("/baskets")
-@Tag(name = "Basket Controller")
+@Tag(name = "Basket Controller", description = "Endpoints for managing basket controller")
 @RequiredArgsConstructor
 public class BasketController {
     private final BasketService basketService;

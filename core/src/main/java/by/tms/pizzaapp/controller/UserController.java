@@ -7,6 +7,7 @@ import by.tms.pizzaapp.service.user.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
@@ -19,14 +20,10 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/users")
-@Tag(name = "User Controller", description = "Some admin's functions")
+@Tag(name = "User Controller", description = "Endpoints for managing user controller")
+@RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
-
-    @Autowired
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
 
     @Operation(summary = "registerUser")
     @PostMapping("/register")

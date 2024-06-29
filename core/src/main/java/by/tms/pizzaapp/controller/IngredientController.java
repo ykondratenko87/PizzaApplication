@@ -15,7 +15,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/ingredients")
-@Tag(name = "Ingredient Controller")
+@Tag(name = "Ingredient Controller", description = "Endpoints for managing ingredient controller")
 @RequiredArgsConstructor
 public class IngredientController {
     private final IngredientService ingredientService;

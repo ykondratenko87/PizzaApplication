@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController
 @RequestMapping("/custom-pizzas")
-@Tag(name = "Custom Pizza Controller", description = "Endpoints for managing custom pizzas")
+@Tag(name = "Custom Pizza Controller", description = "Endpoints for managing custom pizza controller")
 @RequiredArgsConstructor
 public class CustomPizzaController {
     private final CustomPizzaService customPizzaService;

@@ -7,4 +7,5 @@ import java.util.Optional;
 
 public interface CustomPizzaRepository extends JpaRepository<CustomPizza, Long> {
     Optional<CustomPizza> findByUserId(Long userId);
+    void deleteByUserId(Long userId);
 }

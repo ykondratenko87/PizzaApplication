@@ -8,5 +8,6 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface IngredientMapper {
     Ingredient toEntity(IngredientRequest ingredientRequest);
+
     IngredientResponse toResponse(Ingredient ingredient);
 }

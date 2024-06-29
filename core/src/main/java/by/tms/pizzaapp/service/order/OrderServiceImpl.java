@@ -3,16 +3,14 @@ package by.tms.pizzaapp.service.order;
 import by.tms.pizzaapp.dto.order.OrderRequest;
 import by.tms.pizzaapp.dto.order.OrderResponse;
 import by.tms.pizzaapp.entity.basket.Basket;
+import by.tms.pizzaapp.entity.constructor.CustomPizza;
 import by.tms.pizzaapp.entity.order.Order;
 import by.tms.pizzaapp.entity.order.OrderStatus;
 import by.tms.pizzaapp.entity.pizza.Pizza;
 import by.tms.pizzaapp.exception.OrderNotFoundException;
 import by.tms.pizzaapp.exception.UserNotFoundException;
 import by.tms.pizzaapp.mapper.OrderMapper;
-import by.tms.pizzaapp.repository.OrderRepository;
-import by.tms.pizzaapp.repository.BasketRepository;
-import by.tms.pizzaapp.repository.PizzaRepository;
-import by.tms.pizzaapp.repository.UserRepository;
+import by.tms.pizzaapp.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +27,7 @@ public class OrderServiceImpl implements OrderService {
     private final OrderMapper orderMapper;
     private final BasketRepository basketRepository;
     private final PizzaRepository pizzaRepository;
+    private final CustomPizzaRepository customPizzaRepository;
 
     @Override
     public OrderResponse checkout(OrderRequest orderRequest) {
@@ -58,6 +57,7 @@ public class OrderServiceImpl implements OrderService {
         orderRepository.save(currentOrder);
 
         // Удаляем текущую корзину пользователя
+        customPizzaRepository.deleteByUserId(orderRequest.getUserId());
         basketRepository.deleteByUserId(orderRequest.getUserId());
 
         return orderMapper.toResponse(currentOrder);

@@ -33,4 +33,18 @@ public class IngredientController {
         log.info("Creating new ingredient: {}", ingredientRequest);
         return ingredientService.createIngredient(ingredientRequest);
     }
+
+    @Operation(summary = "Delete ingredient by ID")
+    @DeleteMapping("/{id}")
+    public void deleteIngredientById(@PathVariable Long id) {
+        log.info("Deleting ingredient with id: {}", id);
+        ingredientService.deleteIngredientById(id);
+    }
+
+    @Operation(summary = "Update ingredient by ID")
+    @PutMapping("/{id}")
+    public IngredientResponse updateIngredientById(@PathVariable Long id, @Valid @RequestBody IngredientRequest ingredientRequest) {
+        log.info("Updating ingredient with id: {}", id);
+        return ingredientService.updateIngredientById(id, ingredientRequest);
+    }
 }

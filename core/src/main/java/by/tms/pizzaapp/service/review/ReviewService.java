@@ -1,9 +1,7 @@
 package by.tms.pizzaapp.service.review;
 
-import by.tms.pizzaapp.dto.review.ReviewRequest;
-import by.tms.pizzaapp.dto.review.ReviewResponse;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import by.tms.pizzaapp.dto.review.*;
+import org.springframework.data.domain.*;
 
 import java.util.List;
 import java.util.Optional;

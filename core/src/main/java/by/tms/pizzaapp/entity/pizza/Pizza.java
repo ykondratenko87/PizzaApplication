@@ -20,7 +20,6 @@ public class Pizza {
     private int quantity;
     @OneToMany(mappedBy = "pizza", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> reviews;
-
     @ManyToMany
     @JoinTable(schema = "pizzaapp", name = "pizza_ingredients",
             joinColumns = @JoinColumn(name = "pizza_id"),

@@ -7,5 +7,6 @@ import java.util.Optional;
 
 public interface IngredientRepository extends JpaRepository<Ingredient, Long> {
     void deleteById(Long id);
+
     Optional<Ingredient> findByNameAndPrice(String name, double price);
 }

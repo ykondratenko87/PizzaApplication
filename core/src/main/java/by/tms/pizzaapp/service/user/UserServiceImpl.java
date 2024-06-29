@@ -4,26 +4,20 @@ import by.tms.pizzaapp.dto.user.*;
 import by.tms.pizzaapp.entity.user.*;
 import by.tms.pizzaapp.mapper.UserRegistrationMapper;
 import by.tms.pizzaapp.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserRegistrationMapper userRegistrationMapper;
-
-    @Autowired
-    public UserServiceImpl(UserRepository userRepository, UserRegistrationMapper userRegistrationMapper) {
-        this.userRepository = userRepository;
-        this.userRegistrationMapper = userRegistrationMapper;
-    }
 
     @Override
     public UserResponse registerUser(UserRegistrationRequest userRequest) {
@@ -57,7 +51,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-//    @PreAuthorize("hasAuthority('ADMIN')")
     public List<UserResponse> getAllUsers() {
         return userRepository.findAll().stream().map(userRegistrationMapper::toResponse).collect(Collectors.toList());
     }
@@ -94,12 +87,10 @@ public class UserServiceImpl implements UserService {
     public UserResponse updateUser(Long id, UserRegistrationRequest userRequest) {
         User existingUser = userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
-
         existingUser.setName(userRequest.getName());
         existingUser.setSurname(userRequest.getSurname());
         existingUser.setLogin(userRequest.getLogin());
         existingUser.setPassword(userRequest.getPassword());
-
         User updatedUser = userRepository.save(existingUser);
         return userRegistrationMapper.toResponse(updatedUser);
     }

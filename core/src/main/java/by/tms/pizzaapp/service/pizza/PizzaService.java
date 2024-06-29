@@ -1,9 +1,7 @@
 package by.tms.pizzaapp.service.pizza;
 
-import by.tms.pizzaapp.dto.pizza.PizzaRequest;
-import by.tms.pizzaapp.dto.pizza.PizzaResponse;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import by.tms.pizzaapp.dto.pizza.*;
+import org.springframework.data.domain.*;
 
 import java.util.List;
 import java.util.Optional;

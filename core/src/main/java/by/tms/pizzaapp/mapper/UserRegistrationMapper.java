@@ -6,7 +6,6 @@ import org.mapstruct.*;
 
 @Mapper(componentModel = "spring")
 public interface UserRegistrationMapper {
-
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "role", ignore = true)
     User toEntity(UserRegistrationRequest userRegistrationRequest);

@@ -31,8 +31,6 @@ public class Basket {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-
-
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(schema = "pizzaapp", name = "basket_custom_pizzas",
             joinColumns = @JoinColumn(name = "basket_id"),

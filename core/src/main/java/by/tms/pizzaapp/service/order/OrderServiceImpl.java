@@ -57,8 +57,8 @@ public class OrderServiceImpl implements OrderService {
         // Сохраняем изменения
         orderRepository.save(currentOrder);
 
-//        // Удаляем текущую корзину пользователя
-//        basketRepository.deleteByUserId(orderRequest.getUserId());
+        // Удаляем текущую корзину пользователя
+        basketRepository.deleteByUserId(orderRequest.getUserId());
 
         return orderMapper.toResponse(currentOrder);
     }

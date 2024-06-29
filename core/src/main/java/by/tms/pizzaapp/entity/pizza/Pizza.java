@@ -26,6 +26,4 @@ public class Pizza {
             joinColumns = @JoinColumn(name = "pizza_id"),
             inverseJoinColumns = @JoinColumn(name = "ingredient_id"))
     private List<Ingredient> ingredients;
-
-    private boolean custom; // Новое поле для кастомных пицц
 }

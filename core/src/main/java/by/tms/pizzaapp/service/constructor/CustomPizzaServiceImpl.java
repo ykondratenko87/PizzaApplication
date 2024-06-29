@@ -1,9 +1,14 @@
 package by.tms.pizzaapp.service.constructor;
 
+import by.tms.pizzaapp.dto.basket.BasketResponse;
 import by.tms.pizzaapp.dto.constructor.CustomPizzaRequest;
 import by.tms.pizzaapp.dto.constructor.CustomPizzaResponse;
+import by.tms.pizzaapp.entity.basket.Basket;
 import by.tms.pizzaapp.entity.constructor.CustomPizza;
 import by.tms.pizzaapp.entity.ingredient.Ingredient;
+import by.tms.pizzaapp.entity.order.Order;
+import by.tms.pizzaapp.entity.order.OrderStatus;
+import by.tms.pizzaapp.entity.pizza.Pizza;
 import by.tms.pizzaapp.exception.IngredientNotFoundException;
 import by.tms.pizzaapp.exception.UserNotFoundException;
 import by.tms.pizzaapp.mapper.CustomPizzaMapper;
@@ -15,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.NoSuchElementException;
 
 @Service
 @Transactional
@@ -69,5 +75,31 @@ public class CustomPizzaServiceImpl implements CustomPizzaService {
 
         customPizza.setCount(Math.max(newCount, 0)); // Ensure count is not negative
         customPizza.setTotalSum(Math.max(newTotalPrice, 0)); // Ensure totalPrice is not negative
+    }
+
+    @Override
+    public CustomPizzaResponse removeIngredientFromCustomPizza(Long customPizzaId, Long ingredientId) {
+        CustomPizza customPizza = customPizzaRepository.findById(customPizzaId)
+                .orElseThrow(() -> new NoSuchElementException("CustomPizza not found"));
+        Ingredient ingredient = ingredientRepository.findById(ingredientId)
+                .orElseThrow(() -> new NoSuchElementException("Ingredient not found"));
+
+        if (customPizza.getIngredients().contains(ingredient)) {
+            customPizza.getIngredients().remove(ingredient);
+            updateCustomPizzaDetails(customPizza, -1, -ingredient.getPrice());
+
+            ingredient.setPortion(ingredient.getPortion() + 1);
+            ingredientRepository.save(ingredient);
+
+            if (customPizza.getIngredients().isEmpty()) {
+                customPizzaRepository.delete(customPizza);
+            } else {
+                customPizzaRepository.save(customPizza);
+            }
+        } else {
+            throw new NoSuchElementException("Ingredient not found in customPizza");
+        }
+
+        return customPizzaMapper.toResponse(customPizza);
     }
 }

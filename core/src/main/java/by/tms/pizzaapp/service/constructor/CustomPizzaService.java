@@ -5,4 +5,5 @@ import by.tms.pizzaapp.dto.constructor.CustomPizzaResponse;
 
 public interface CustomPizzaService {
     CustomPizzaResponse addIngredientToCustomPizza(CustomPizzaRequest customPizzaRequest);
+    CustomPizzaResponse removeIngredientFromCustomPizza(Long customPizzaId, Long ingredientId);
 }

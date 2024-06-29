@@ -7,6 +7,9 @@ import lombok.Data;
 
 @Data
 public class IngredientRequest {
+
+    private Long id; // Add this line
+
     @NotBlank(message = "Name is mandatory")
     private String name;
     @Positive(message = "Price must be positive")

@@ -1,8 +1,8 @@
-//package by.tms.pizzaapp.service.pizza;
-//
-//import by.tms.pizzaapp.dto.pizza.CustomPizzaRequest;
-//import by.tms.pizzaapp.dto.pizza.CustomPizzaResponse;
-//
-//public interface CustomPizzaService {
-//    CustomPizzaResponse createCustomPizza(CustomPizzaRequest customPizzaRequest);
-//}
+package by.tms.pizzaapp.service.constructor;
+
+import by.tms.pizzaapp.dto.constructor.CustomPizzaRequest;
+import by.tms.pizzaapp.dto.constructor.CustomPizzaResponse;
+
+public interface CustomPizzaService {
+    CustomPizzaResponse addIngredientToCustomPizza(CustomPizzaRequest customPizzaRequest);
+}

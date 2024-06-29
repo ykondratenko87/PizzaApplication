@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -23,5 +24,13 @@ public class CustomPizzaController {
     public CustomPizzaResponse addIngredientToCustomPizza(@Valid @org.springframework.web.bind.annotation.RequestBody CustomPizzaRequest customPizzaRequest) {
         log.info("Add ingredient to customPizza: {}", customPizzaRequest);
         return customPizzaService.addIngredientToCustomPizza(customPizzaRequest);
+    }
+
+
+    @Operation(summary = "Remove ingredient from customPizza", description = "Удаляет ингредиент")
+    @DeleteMapping("/{customPizzaId}/ingredients/{ingredientId}")
+    public ResponseEntity<CustomPizzaResponse> removeIngredientFromCustomPizza(@PathVariable Long customPizzaId, @PathVariable Long ingredientId) {
+        log.info("Remove ingredient from customPizza: customPizzaId={}, ingredientId={}", customPizzaId, ingredientId);
+        return ResponseEntity.ok(customPizzaService.removeIngredientFromCustomPizza(customPizzaId, ingredientId));
     }
 }

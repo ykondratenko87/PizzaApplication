@@ -1,5 +1,6 @@
 package by.tms.pizzaapp.entity.basket;
 
+import by.tms.pizzaapp.entity.constructor.CustomPizza;
 import by.tms.pizzaapp.entity.order.Order;
 import by.tms.pizzaapp.entity.pizza.Pizza;
 import by.tms.pizzaapp.entity.user.User;
@@ -30,4 +31,11 @@ public class Basket {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(schema = "pizzaapp", name = "basket_custom_pizzas",
+            joinColumns = @JoinColumn(name = "basket_id"),
+            inverseJoinColumns = @JoinColumn(name = "custom_pizza_id"))
+    private List<CustomPizza> customPizzas;
 }

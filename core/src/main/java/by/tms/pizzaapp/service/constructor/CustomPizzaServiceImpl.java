@@ -1,5 +1,6 @@
 package by.tms.pizzaapp.service.constructor;
 
+import by.tms.pizzaapp.dto.basket.BasketRequest;
 import by.tms.pizzaapp.dto.basket.BasketResponse;
 import by.tms.pizzaapp.dto.constructor.CustomPizzaRequest;
 import by.tms.pizzaapp.dto.constructor.CustomPizzaResponse;
@@ -11,14 +12,14 @@ import by.tms.pizzaapp.entity.order.OrderStatus;
 import by.tms.pizzaapp.entity.pizza.Pizza;
 import by.tms.pizzaapp.exception.IngredientNotFoundException;
 import by.tms.pizzaapp.exception.UserNotFoundException;
+import by.tms.pizzaapp.mapper.BasketMapper;
 import by.tms.pizzaapp.mapper.CustomPizzaMapper;
-import by.tms.pizzaapp.repository.CustomPizzaRepository;
-import by.tms.pizzaapp.repository.IngredientRepository;
-import by.tms.pizzaapp.repository.UserRepository;
+import by.tms.pizzaapp.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
 
@@ -30,6 +31,9 @@ public class CustomPizzaServiceImpl implements CustomPizzaService {
     private final IngredientRepository ingredientRepository;
     private final CustomPizzaMapper customPizzaMapper;
     private final UserRepository userRepository;
+    private final BasketRepository basketRepository;
+    private final OrderRepository orderRepository;
+    private final BasketMapper basketMapper;
 
     @Override
     public CustomPizzaResponse addIngredientToCustomPizza(CustomPizzaRequest customPizzaRequest) {
@@ -101,5 +105,77 @@ public class CustomPizzaServiceImpl implements CustomPizzaService {
         }
 
         return customPizzaMapper.toResponse(customPizza);
+    }
+    @Override
+    public BasketResponse addCustomPizzaToBasket(Long customPizzaId, BasketRequest basketRequest) {
+        validateUser(customPizzaId, basketRequest.getUserId());
+
+        CustomPizza customPizza = customPizzaRepository.findById(customPizzaId)
+                .orElseThrow(() -> new NoSuchElementException("CustomPizza not found"));
+        Basket basket = basketRepository.findByUserId(basketRequest.getUserId())
+                .orElseGet(() -> {
+                    Basket newBasket = createNewBasket(basketRequest.getUserId());
+                    Order newOrder = createNewOrder(basketRequest.getUserId());
+                    newBasket.setOrders(new ArrayList<>());
+                    newBasket.getOrders().add(newOrder);
+                    orderRepository.save(newOrder);
+                    basketRepository.save(newBasket);
+                    return newBasket;
+                });
+
+        basket.getCustomPizzas().add(customPizza);
+        updateBasketDetails(basket, basketRequest.getCount(), customPizza.getTotalSum());
+
+        Order currentOrder = basket.getOrders().stream()
+                .filter(order -> order.getStatus() == OrderStatus.ORDERING)
+                .findFirst()
+                .orElseGet(() -> {
+                    Order newOrder = createNewOrder(basketRequest.getUserId());
+                    newOrder.setTotalPrice(basket.getTotalPrice());
+                    newOrder.setAddress("");
+                    basket.getOrders().add(newOrder);
+                    orderRepository.save(newOrder);
+                    return newOrder;
+                });
+
+        currentOrder.setTotalPrice(basket.getTotalPrice());
+
+        basketRepository.save(basket);
+        orderRepository.save(currentOrder);
+        return basketMapper.toResponse(basket);
+    }
+
+    private void validateUser(Long customPizzaId, Long userId) {
+        if (!userRepository.existsById(userId)) {
+            throw new UserNotFoundException("User not found");
+        }
+        if (!customPizzaRepository.existsById(customPizzaId)) {
+            throw new NoSuchElementException("CustomPizza not found");
+        }
+    }
+
+    private Basket createNewBasket(Long userId) {
+        Basket newBasket = new Basket();
+        newBasket.setUser(userRepository.getById(userId));
+        newBasket.setCustomPizzas(new ArrayList<>());
+        return newBasket;
+    }
+
+    private Order createNewOrder(Long userId) {
+        Order newOrder = new Order();
+        newOrder.setUser(userRepository.getById(userId));
+        newOrder.setStatus(OrderStatus.ORDERING);
+        newOrder.setOrderDate(LocalDate.now());
+        newOrder.setTotalPrice(0.0);
+        newOrder.setAddress("");
+        return newOrder;
+    }
+
+    private void updateBasketDetails(Basket basket, long countChange, double priceChange) {
+        long newCount = basket.getCount() + countChange;
+        double newTotalPrice = basket.getTotalPrice() + priceChange;
+
+        basket.setCount(Math.max(newCount, 0));
+        basket.setTotalPrice(Math.max(newTotalPrice, 0));
     }
 }

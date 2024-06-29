@@ -101,10 +101,10 @@ public class BasketServiceImpl implements BasketService {
 
     private void validateUserAndPizza(Long userId, Long pizzaId) {
         if (!userRepository.existsById(userId)) {
-            throw new UserNotFoundException("User not found");
+            throw new ApplicationExceptions.UserNotFoundException("User not found");
         }
         if (!pizzaRepository.existsById(pizzaId)) {
-            throw new PizzaNotFoundException("Pizza not found");
+            throw new ApplicationExceptions.PizzaNotFoundException("Pizza not found");
         }
     }
 

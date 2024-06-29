@@ -32,9 +32,9 @@ public class CustomPizzaServiceImpl implements CustomPizzaService {
     public CustomPizzaResponse addIngredientToCustomPizza(CustomPizzaRequest customPizzaRequest) {
         validateUserAndCustomPizza(customPizzaRequest.getUserId(), customPizzaRequest.getIngredientId());
         Ingredient ingredient = ingredientRepository.findById(customPizzaRequest.getIngredientId())
-                .orElseThrow(() -> new IngredientNotFoundException("Ingredient not found"));
+                .orElseThrow(() -> new ApplicationExceptions.IngredientNotFoundException("Ingredient not found"));
         if (ingredient.getPortion() < 1) {
-            throw new IngredientNotFoundException("Not enough portions of the ingredient available");
+            throw new ApplicationExceptions.IngredientNotFoundException("Not enough portions of the ingredient available");
         }
         CustomPizza customPizza = customPizzaRepository.findByUserId(customPizzaRequest.getUserId())
                 .orElseGet(() -> {
@@ -52,10 +52,10 @@ public class CustomPizzaServiceImpl implements CustomPizzaService {
 
     private void validateUserAndCustomPizza(Long userId, Long ingredientId) {
         if (!userRepository.existsById(userId)) {
-            throw new UserNotFoundException("User not found");
+            throw new ApplicationExceptions.UserNotFoundException("User not found");
         }
         if (!ingredientRepository.existsById(ingredientId)) {
-            throw new IngredientNotFoundException("Ingredient not found");
+            throw new ApplicationExceptions.IngredientNotFoundException("Ingredient not found");
         }
     }
 
@@ -131,7 +131,7 @@ public class CustomPizzaServiceImpl implements CustomPizzaService {
 
     private void validateUser(Long customPizzaId, Long userId) {
         if (!userRepository.existsById(userId)) {
-            throw new UserNotFoundException("User not found");
+            throw new ApplicationExceptions.UserNotFoundException("User not found");
         }
         if (!customPizzaRepository.existsById(customPizzaId)) {
             throw new NoSuchElementException("CustomPizza not found");

@@ -3,9 +3,7 @@ package by.tms.pizzaapp.exception;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -13,22 +11,16 @@ import java.util.stream.Collectors;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(UserNotFoundException.class)
+    @ExceptionHandler(ApplicationExceptions.UserNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public String handleUserNotFoundException(UserNotFoundException e) {
+    public String handleUserNotFoundException(ApplicationExceptions.UserNotFoundException e) {
         return e.getMessage();  // Возвращает сообщение об ошибке при отсутствии пользователя
     }
 
-    @ExceptionHandler(PizzaNotFoundException.class)
+    @ExceptionHandler(ApplicationExceptions.PizzaNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public String handlePizzaNotFoundException(PizzaNotFoundException e) {
+    public String handlePizzaNotFoundException(ApplicationExceptions.PizzaNotFoundException e) {
         return e.getMessage();  // Возвращает сообщение об ошибке при отсутствии пиццы
-    }
-
-    @ExceptionHandler(NoSuchElementException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public String handleNoSuchElementException(NoSuchElementException e) {
-        return e.getMessage();  // Возвращает сообщение об ошибке при отсутствии элемента
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -51,5 +43,11 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public String handleGeneralException(Exception e) {
         return e.getMessage();  // Возвращает общее сообщение об ошибке для всех остальных исключений
+    }
+
+    @ExceptionHandler(NoSuchElementException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public String handlePromoNotFoundException(NoSuchElementException e) {
+        return e.getMessage();  // Возвращает сообщение об ошибке при отсутствии промо
     }
 }

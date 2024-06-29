@@ -1,5 +1,7 @@
 package by.tms.pizzaapp.controller;
 
+import by.tms.pizzaapp.dto.basket.BasketRequest;
+import by.tms.pizzaapp.dto.basket.BasketResponse;
 import by.tms.pizzaapp.dto.constructor.CustomPizzaRequest;
 import by.tms.pizzaapp.dto.constructor.CustomPizzaResponse;
 import by.tms.pizzaapp.service.constructor.CustomPizzaService;
@@ -32,5 +34,13 @@ public class CustomPizzaController {
     public ResponseEntity<CustomPizzaResponse> removeIngredientFromCustomPizza(@PathVariable Long customPizzaId, @PathVariable Long ingredientId) {
         log.info("Remove ingredient from customPizza: customPizzaId={}, ingredientId={}", customPizzaId, ingredientId);
         return ResponseEntity.ok(customPizzaService.removeIngredientFromCustomPizza(customPizzaId, ingredientId));
+    }
+
+    @Operation(summary = "Add custom pizza to basket", description = "Добавляет пользовательскую пиццу в корзину")
+    @PostMapping("/{customPizzaId}/basket")
+    public ResponseEntity<BasketResponse> addCustomPizzaToBasket(@PathVariable Long customPizzaId, @RequestBody @Valid BasketRequest basketRequest) {
+        log.info("Add custom pizza to basket: customPizzaId={}, basketRequest={}", customPizzaId, basketRequest);
+        BasketResponse basketResponse = customPizzaService.addCustomPizzaToBasket(customPizzaId, basketRequest);
+        return ResponseEntity.ok(basketResponse);
     }
 }

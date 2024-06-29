@@ -39,7 +39,14 @@ public class CustomPizzaServiceImpl implements CustomPizzaService {
     public CustomPizzaResponse addIngredientToCustomPizza(CustomPizzaRequest customPizzaRequest) {
         validateUserAndCustomPizza(customPizzaRequest.getUserId(), customPizzaRequest.getIngredientId());
 
-        Ingredient ingredient = ingredientRepository.getById(customPizzaRequest.getIngredientId());
+        Ingredient ingredient = ingredientRepository.findById(customPizzaRequest.getIngredientId())
+                .orElseThrow(() -> new IngredientNotFoundException("Ingredient not found"));
+
+        // Check if enough portions of the ingredient are available
+        if (ingredient.getPortion() < 1) {
+            throw new IngredientNotFoundException("Not enough portions of the ingredient available");
+        }
+
         CustomPizza customPizza = customPizzaRepository.findByUserId(customPizzaRequest.getUserId())
                 .orElseGet(() -> {
                     CustomPizza newCustomPizza = createNewCustomPizza(customPizzaRequest.getUserId());

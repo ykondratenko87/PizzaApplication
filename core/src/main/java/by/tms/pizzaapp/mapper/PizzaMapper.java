@@ -1,7 +1,6 @@
 package by.tms.pizzaapp.mapper;
 
-import by.tms.pizzaapp.dto.pizza.PizzaRequest;
-import by.tms.pizzaapp.dto.pizza.PizzaResponse;
+import by.tms.pizzaapp.dto.pizza.*;
 import by.tms.pizzaapp.entity.pizza.Pizza;
 import org.mapstruct.Mapper;
 

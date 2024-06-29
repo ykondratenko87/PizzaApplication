@@ -1,7 +1,6 @@
 package by.tms.pizzaapp.mapper;
 
-import by.tms.pizzaapp.dto.promo.PromoRequest;
-import by.tms.pizzaapp.dto.promo.PromoResponse;
+import by.tms.pizzaapp.dto.promo.*;
 import by.tms.pizzaapp.entity.promo.Promo;
 import org.mapstruct.Mapper;
 

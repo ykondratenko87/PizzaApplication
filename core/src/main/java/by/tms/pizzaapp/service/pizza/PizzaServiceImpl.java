@@ -1,31 +1,23 @@
 package by.tms.pizzaapp.service.pizza;
 
-import by.tms.pizzaapp.dto.pizza.PizzaRequest;
-import by.tms.pizzaapp.dto.pizza.PizzaResponse;
+import by.tms.pizzaapp.dto.pizza.*;
 import by.tms.pizzaapp.entity.pizza.Pizza;
 import by.tms.pizzaapp.mapper.PizzaMapper;
 import by.tms.pizzaapp.repository.PizzaRepository;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class PizzaServiceImpl implements PizzaService {
     private final PizzaRepository pizzaRepository;
     private final PizzaMapper pizzaMapper;
-
-    @Autowired
-    public PizzaServiceImpl(PizzaRepository pizzaRepository, PizzaMapper pizzaMapper) {
-        this.pizzaRepository = pizzaRepository;
-        this.pizzaMapper = pizzaMapper;
-    }
 
     @Override
     public List<PizzaResponse> getAllPizzas() {
@@ -40,7 +32,6 @@ public class PizzaServiceImpl implements PizzaService {
     @Override
     public PizzaResponse createPizza(PizzaRequest pizzaRequest) {
         Optional<Pizza> existingPizza = pizzaRepository.findByNameAndDescriptionAndPrice(pizzaRequest.getName(), pizzaRequest.getDescription(), pizzaRequest.getPrice());
-
         Pizza savedPizza;
         if (existingPizza.isPresent()) {
             Pizza pizza = existingPizza.get();
@@ -50,7 +41,6 @@ public class PizzaServiceImpl implements PizzaService {
             Pizza pizza = pizzaMapper.toEntity(pizzaRequest);
             savedPizza = pizzaRepository.save(pizza);
         }
-
         return pizzaMapper.toResponse(savedPizza);
     }
 

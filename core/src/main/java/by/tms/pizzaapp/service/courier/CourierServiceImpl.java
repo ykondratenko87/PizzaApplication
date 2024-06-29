@@ -2,14 +2,10 @@ package by.tms.pizzaapp.service.courier;
 
 import by.tms.pizzaapp.dto.courier.CourierRequest;
 import by.tms.pizzaapp.entity.courier.Courier;
-import by.tms.pizzaapp.entity.order.Order;
-import by.tms.pizzaapp.entity.order.OrderStatus;
-import by.tms.pizzaapp.exception.CourierAlreadyExistsException;
-import by.tms.pizzaapp.exception.CourierNotFoundException;
-import by.tms.pizzaapp.exception.OrderNotFoundException;
+import by.tms.pizzaapp.entity.order.*;
+import by.tms.pizzaapp.exception.*;
 import by.tms.pizzaapp.mapper.CourierMapper;
-import by.tms.pizzaapp.repository.CourierRepository;
-import by.tms.pizzaapp.repository.OrderRepository;
+import by.tms.pizzaapp.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,12 +20,9 @@ public class CourierServiceImpl implements CourierService {
 
     @Override
     public void registrationCourier(CourierRequest courierRequest) {
-        // Проверяем, существует ли курьер с таким логином
         if (courierRepository.findByLogin(courierRequest.getLogin()).isPresent()) {
             throw new CourierAlreadyExistsException("Courier with login " + courierRequest.getLogin() + " already exists");
         }
-
-        // Маппим CourierRequest в Courier и сохраняем
         Courier courier = courierMapper.toEntity(courierRequest);
         courierRepository.save(courier);
     }
@@ -45,10 +38,8 @@ public class CourierServiceImpl implements CourierService {
     public void deliverOrder(Long orderId, Long courierId) {
         Courier courier = courierRepository.findById(courierId)
                 .orElseThrow(() -> new CourierNotFoundException("Courier not found"));
-
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new OrderNotFoundException("Order not found"));
-
         order.setStatus(OrderStatus.COMPLETED);
         order.setCourier(courier);
         orderRepository.save(order);

@@ -1,26 +1,20 @@
 package by.tms.pizzaapp.service.basket;
 
-import by.tms.pizzaapp.dto.basket.BasketRequest;
-import by.tms.pizzaapp.dto.basket.BasketResponse;
+import by.tms.pizzaapp.dto.basket.*;
 import by.tms.pizzaapp.entity.basket.Basket;
 import by.tms.pizzaapp.entity.order.Order;
 import by.tms.pizzaapp.entity.order.OrderStatus;
 import by.tms.pizzaapp.entity.pizza.Pizza;
-import by.tms.pizzaapp.exception.UserNotFoundException;
-import by.tms.pizzaapp.exception.PizzaNotFoundException;
+import by.tms.pizzaapp.exception.*;
 import by.tms.pizzaapp.mapper.BasketMapper;
-import by.tms.pizzaapp.repository.BasketRepository;
-import by.tms.pizzaapp.repository.OrderRepository;
-import by.tms.pizzaapp.repository.PizzaRepository;
-import by.tms.pizzaapp.repository.UserRepository;
+import by.tms.pizzaapp.repository.*;
 import by.tms.pizzaapp.service.promo.PromoService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 @Service
 @Transactional
@@ -36,7 +30,6 @@ public class BasketServiceImpl implements BasketService {
     @Override
     public BasketResponse addPizzaToBasket(BasketRequest basketRequest) {
         validateUserAndPizza(basketRequest.getUserId(), basketRequest.getPizzaId());
-
         Pizza pizza = pizzaRepository.getById(basketRequest.getPizzaId());
         Basket basket = basketRepository.findByUserId(basketRequest.getUserId())
                 .orElseGet(() -> {
@@ -44,33 +37,26 @@ public class BasketServiceImpl implements BasketService {
                     Order newOrder = createNewOrder(basketRequest.getUserId());
                     newBasket.setOrders(new ArrayList<>());
                     newBasket.getOrders().add(newOrder);
-                    orderRepository.save(newOrder); // Сохранить новый заказ в базу данных
-                    basketRepository.save(newBasket); // Сохранить новую корзину
+                    orderRepository.save(newOrder);
+                    basketRepository.save(newBasket);
                     return newBasket;
                 });
-
         basket.getPizzas().add(pizza);
         updateBasketDetails(basket, basketRequest.getCount(), pizza.getPrice());
-
-        // Уменьшение количества пиццы в базе данных
         pizza.setQuantity(pizza.getQuantity() - 1);
-        pizzaRepository.save(pizza); // Сохранить обновленное количество пиццы
-
-        // Обновление заказа
+        pizzaRepository.save(pizza);
         Order currentOrder = basket.getOrders().stream()
                 .filter(order -> order.getStatus() == OrderStatus.ORDERING)
                 .findFirst()
                 .orElseGet(() -> {
                     Order newOrder = createNewOrder(basketRequest.getUserId());
                     newOrder.setTotalPrice(basket.getTotalPrice());
-                    newOrder.setAddress(""); // Можно установить начальный адрес, если он имеется
+                    newOrder.setAddress("");
                     basket.getOrders().add(newOrder);
                     orderRepository.save(newOrder);
                     return newOrder;
                 });
-
         currentOrder.setTotalPrice(basket.getTotalPrice());
-
         basketRepository.save(basket);
         orderRepository.save(currentOrder);
         return basketMapper.toResponse(basket);
@@ -82,35 +68,27 @@ public class BasketServiceImpl implements BasketService {
                 .orElseThrow(() -> new NoSuchElementException("Basket not found"));
         Pizza pizza = pizzaRepository.findById(pizzaId)
                 .orElseThrow(() -> new NoSuchElementException("Pizza not found"));
-
         if (basket.getPizzas().contains(pizza)) {
             basket.getPizzas().remove(pizza);
             updateBasketDetails(basket, -1, -pizza.getPrice());
-
-            // Увеличение количества пиццы в базе данных
             pizza.setQuantity(pizza.getQuantity() + 1);
-            pizzaRepository.save(pizza); // Сохранить обновленное количество пиццы
-
-            // Обновление заказа
+            pizzaRepository.save(pizza);
             Order currentOrder = basket.getOrders().stream()
                     .filter(order -> order.getStatus() == OrderStatus.ORDERING)
                     .findFirst()
                     .orElseThrow(() -> new RuntimeException("Current ordering order not found"));
-
             if (basket.getPizzas().isEmpty()) {
-                // Удалить корзину и заказ, если корзина пуста
-                basket.getOrders().clear(); // Удалить все заказы из корзины
+                basket.getOrders().clear();
                 orderRepository.delete(currentOrder);
                 basketRepository.delete(basket);
             } else {
                 currentOrder.setTotalPrice(basket.getTotalPrice());
-                basketRepository.save(basket); // Сохранить изменения в корзине
+                basketRepository.save(basket);
                 orderRepository.save(currentOrder);
             }
         } else {
             throw new NoSuchElementException("Pizza not found in basket");
         }
-
         return basketMapper.toResponse(basket);
     }
 
@@ -142,46 +120,35 @@ public class BasketServiceImpl implements BasketService {
         newOrder.setUser(userRepository.getById(userId));
         newOrder.setStatus(OrderStatus.ORDERING);
         newOrder.setOrderDate(LocalDate.now());
-        newOrder.setTotalPrice(0.0); // Изначально цена равна 0
-        newOrder.setAddress(""); // Можно установить начальный адрес, если он имеется
+        newOrder.setTotalPrice(0.0);
+        newOrder.setAddress("");
         return newOrder;
     }
 
     private void updateBasketDetails(Basket basket, long countChange, double priceChange) {
         long newCount = basket.getCount() + countChange;
         double newTotalPrice = basket.getTotalPrice() + priceChange;
-
-        basket.setCount(Math.max(newCount, 0)); // Ensure count is not negative
-        basket.setTotalPrice(Math.max(newTotalPrice, 0)); // Ensure totalPrice is not negative
+        basket.setCount(Math.max(newCount, 0));
+        basket.setTotalPrice(Math.max(newTotalPrice, 0));
     }
-
 
     @Override
     public BasketResponse applyPromoCode(Long basketId, String promoCode) {
         Basket basket = basketRepository.findById(basketId)
                 .orElseThrow(() -> new NoSuchElementException("Basket not found"));
-
         if (!promoService.isPromoValid(promoCode)) {
             throw new IllegalArgumentException("Invalid promo code");
         }
-
         double discount = basket.getTotalPrice() * 0.1;
         double newTotalPrice = basket.getTotalPrice() - discount;
         basket.setTotalPrice(newTotalPrice);
-
-        // Найти текущий заказ с статусом ORDERING
         Order currentOrder = basket.getOrders().stream()
                 .filter(order -> order.getStatus() == OrderStatus.ORDERING)
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("Current ordering order not found"));
-
-        // Обновить цену в заказе
         currentOrder.setTotalPrice(newTotalPrice);
-
-        // Сохранить изменения в базе данных
         basketRepository.save(basket);
         orderRepository.save(currentOrder);
-
         return basketMapper.toResponse(basket);
     }
 }

@@ -1,7 +1,6 @@
 package by.tms.pizzaapp.repository;
 
-import by.tms.pizzaapp.entity.order.Order;
-import by.tms.pizzaapp.entity.order.OrderStatus;
+import by.tms.pizzaapp.entity.order.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

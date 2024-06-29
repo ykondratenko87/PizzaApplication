@@ -25,13 +25,11 @@ public class Order {
     private double totalPrice;
     @Column(name = "order_date", nullable = false)
     private LocalDate orderDate;
-
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(schema = "pizzaapp", name = "order_pizzas",
             joinColumns = @JoinColumn(name = "order_id"),
             inverseJoinColumns = @JoinColumn(name = "pizza_id"))
     private List<Pizza> pizzas;
-
     @ManyToOne
     @JoinColumn(name = "courier_id")
     private Courier courier;

@@ -1,36 +1,25 @@
 package by.tms.pizzaapp.service.review;
 
-import by.tms.pizzaapp.dto.review.ReviewRequest;
-import by.tms.pizzaapp.dto.review.ReviewResponse;
+import by.tms.pizzaapp.dto.review.*;
 import by.tms.pizzaapp.entity.pizza.Pizza;
 import by.tms.pizzaapp.entity.review.Review;
 import by.tms.pizzaapp.mapper.ReviewMapper;
-import by.tms.pizzaapp.repository.PizzaRepository;
-import by.tms.pizzaapp.repository.ReviewRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import by.tms.pizzaapp.repository.*;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class ReviewServiceImpl implements ReviewService {
     private final ReviewRepository reviewRepository;
     private final ReviewMapper reviewMapper;
     private final PizzaRepository pizzaRepository;
-
-    @Autowired
-    public ReviewServiceImpl(ReviewRepository reviewRepository, ReviewMapper reviewMapper, PizzaRepository pizzaRepository) {
-        this.reviewRepository = reviewRepository;
-        this.reviewMapper = reviewMapper;
-        this.pizzaRepository = pizzaRepository;
-    }
 
     @Override
     public List<ReviewResponse> getAllReviews() {

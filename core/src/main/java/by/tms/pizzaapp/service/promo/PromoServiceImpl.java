@@ -1,16 +1,17 @@
 package by.tms.pizzaapp.service.promo;
 
-import by.tms.pizzaapp.dto.promo.PromoRequest;
-import by.tms.pizzaapp.dto.promo.PromoResponse;
+import by.tms.pizzaapp.dto.promo.*;
 import by.tms.pizzaapp.entity.promo.Promo;
 import by.tms.pizzaapp.mapper.PromoMapper;
 import by.tms.pizzaapp.repository.PromoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.NoSuchElementException;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class PromoServiceImpl implements PromoService {
     private final PromoRepository promoRepository;

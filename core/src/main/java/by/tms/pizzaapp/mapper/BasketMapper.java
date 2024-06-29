@@ -1,10 +1,8 @@
 package by.tms.pizzaapp.mapper;
 
-import by.tms.pizzaapp.dto.basket.BasketRequest;
-import by.tms.pizzaapp.dto.basket.BasketResponse;
+import by.tms.pizzaapp.dto.basket.*;
 import by.tms.pizzaapp.entity.basket.Basket;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+import org.mapstruct.*;
 
 @Mapper(componentModel = "spring")
 public interface BasketMapper {

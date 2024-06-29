@@ -38,4 +38,11 @@ public class BasketController {
         log.info("Get basket by user ID: {}", userId);
         return basketService.getBasketByUserId(userId);
     }
+
+    @Operation(summary = "Apply promo code to basket", description = "Применяет промокод к корзине")
+    @PostMapping("/{basketId}/apply-promo")
+    public BasketResponse applyPromoCode(@PathVariable Long basketId, @RequestParam String promoCode) {
+        log.info("Apply promo code: {} to basket: {}", promoCode, basketId);
+        return basketService.applyPromoCode(basketId, promoCode);
+    }
 }

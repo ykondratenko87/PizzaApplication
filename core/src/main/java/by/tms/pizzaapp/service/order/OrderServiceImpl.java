@@ -28,10 +28,10 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderResponse checkout(OrderRequest orderRequest) {
         if (!userRepository.existsById(orderRequest.getUserId())) {
-            throw new UserNotFoundException("User not found");
+            throw new ApplicationExceptions.UserNotFoundException("User not found");
         }
         Order currentOrder = orderRepository.findByUserIdAndStatus(orderRequest.getUserId(), OrderStatus.ORDERING)
-                .orElseThrow(() -> new OrderNotFoundException("Current ordering order not found"));
+                .orElseThrow(() -> new ApplicationExceptions.OrderNotFoundException("Current ordering order not found"));
         currentOrder.setAddress(orderRequest.getAddress());
         currentOrder.setStatus(OrderStatus.IN_DELIVERY);
         currentOrder.setTotalPrice(orderRequest.getTotalPrice());

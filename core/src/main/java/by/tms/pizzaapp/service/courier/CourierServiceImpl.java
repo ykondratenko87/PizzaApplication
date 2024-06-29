@@ -21,7 +21,7 @@ public class CourierServiceImpl implements CourierService {
     @Override
     public void registrationCourier(CourierRequest courierRequest) {
         if (courierRepository.findByLogin(courierRequest.getLogin()).isPresent()) {
-            throw new CourierAlreadyExistsException("Courier with login " + courierRequest.getLogin() + " already exists");
+            throw new ApplicationExceptions.CourierAlreadyExistsException("Courier with login " + courierRequest.getLogin() + " already exists");
         }
         Courier courier = courierMapper.toEntity(courierRequest);
         courierRepository.save(courier);
@@ -31,15 +31,15 @@ public class CourierServiceImpl implements CourierService {
     public Courier loginCourier(String login, String password) {
         return courierRepository.findByLogin(login)
                 .filter(courier -> courier.getPassword().equals(password))
-                .orElseThrow(() -> new CourierNotFoundException("Courier not found or invalid credentials"));
+                .orElseThrow(() -> new ApplicationExceptions.CourierNotFoundException("Courier not found or invalid credentials"));
     }
 
     @Override
     public void deliverOrder(Long orderId, Long courierId) {
         Courier courier = courierRepository.findById(courierId)
-                .orElseThrow(() -> new CourierNotFoundException("Courier not found"));
+                .orElseThrow(() -> new ApplicationExceptions.CourierNotFoundException("Courier not found"));
         Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new OrderNotFoundException("Order not found"));
+                .orElseThrow(() -> new ApplicationExceptions.OrderNotFoundException("Order not found"));
         order.setStatus(OrderStatus.COMPLETED);
         order.setCourier(courier);
         orderRepository.save(order);

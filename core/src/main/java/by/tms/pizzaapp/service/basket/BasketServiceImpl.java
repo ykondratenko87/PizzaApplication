@@ -13,6 +13,7 @@ import by.tms.pizzaapp.repository.BasketRepository;
 import by.tms.pizzaapp.repository.OrderRepository;
 import by.tms.pizzaapp.repository.PizzaRepository;
 import by.tms.pizzaapp.repository.UserRepository;
+import by.tms.pizzaapp.service.promo.PromoService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,7 @@ public class BasketServiceImpl implements BasketService {
     private final UserRepository userRepository;
     private final OrderRepository orderRepository;
     private final BasketMapper basketMapper;
+    private final PromoService promoService;
 
     @Override
     public BasketResponse addPizzaToBasket(BasketRequest basketRequest) {
@@ -151,5 +153,35 @@ public class BasketServiceImpl implements BasketService {
 
         basket.setCount(Math.max(newCount, 0)); // Ensure count is not negative
         basket.setTotalPrice(Math.max(newTotalPrice, 0)); // Ensure totalPrice is not negative
+    }
+
+
+    @Override
+    public BasketResponse applyPromoCode(Long basketId, String promoCode) {
+        Basket basket = basketRepository.findById(basketId)
+                .orElseThrow(() -> new NoSuchElementException("Basket not found"));
+
+        if (!promoService.isPromoValid(promoCode)) {
+            throw new IllegalArgumentException("Invalid promo code");
+        }
+
+        double discount = basket.getTotalPrice() * 0.1;
+        double newTotalPrice = basket.getTotalPrice() - discount;
+        basket.setTotalPrice(newTotalPrice);
+
+        // Найти текущий заказ с статусом ORDERING
+        Order currentOrder = basket.getOrders().stream()
+                .filter(order -> order.getStatus() == OrderStatus.ORDERING)
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Current ordering order not found"));
+
+        // Обновить цену в заказе
+        currentOrder.setTotalPrice(newTotalPrice);
+
+        // Сохранить изменения в базе данных
+        basketRepository.save(basket);
+        orderRepository.save(currentOrder);
+
+        return basketMapper.toResponse(basket);
     }
 }

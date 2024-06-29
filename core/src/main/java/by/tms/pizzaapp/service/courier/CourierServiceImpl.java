@@ -7,6 +7,9 @@ import by.tms.pizzaapp.exception.*;
 import by.tms.pizzaapp.mapper.CourierMapper;
 import by.tms.pizzaapp.repository.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +22,7 @@ public class CourierServiceImpl implements CourierService {
     private final OrderRepository orderRepository;
 
     @Override
+    @CacheEvict(value = "couriers", allEntries = true)
     public void registrationCourier(CourierRequest courierRequest) {
         if (courierRepository.findByLogin(courierRequest.getLogin()).isPresent()) {
             throw new ApplicationExceptions.CourierAlreadyExistsException("Courier with login " + courierRequest.getLogin() + " already exists");
@@ -28,6 +32,7 @@ public class CourierServiceImpl implements CourierService {
     }
 
     @Override
+    @Cacheable(value = "couriers", key = "#login")
     public Courier loginCourier(String login, String password) {
         return courierRepository.findByLogin(login)
                 .filter(courier -> courier.getPassword().equals(password))
@@ -35,6 +40,7 @@ public class CourierServiceImpl implements CourierService {
     }
 
     @Override
+    @CachePut(value = "orders", key = "#orderId")
     public void deliverOrder(Long orderId, Long courierId) {
         Courier courier = courierRepository.findById(courierId)
                 .orElseThrow(() -> new ApplicationExceptions.CourierNotFoundException("Courier not found"));

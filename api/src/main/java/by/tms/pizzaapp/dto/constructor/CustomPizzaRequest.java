@@ -1,9 +1,10 @@
 package by.tms.pizzaapp.dto.constructor;
 
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 
+@Schema(description = "CustomPizza request")
 @Data
 public class CustomPizzaRequest {
     @NotNull

@@ -1,11 +1,10 @@
 package by.tms.pizzaapp.dto.review;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 
-@Schema(description = "Review entity")
+@Schema(description = "Review request")
 @Data
 public class ReviewRequest {
     @NotNull(message = "Description is required")

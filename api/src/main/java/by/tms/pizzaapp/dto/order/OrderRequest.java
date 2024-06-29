@@ -1,16 +1,13 @@
 package by.tms.pizzaapp.dto.order;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 
 import java.time.LocalDate;
 import java.util.List;
 
-@Schema(description = "Order entity")
+@Schema(description = "Order request")
 @Data
 public class OrderRequest {
     @Positive(message = "Pizza price must be positive")

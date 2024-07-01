@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Register Courier</title>
+</head>
+<body>
+<h1>Register Courier</h1>
+<form th:action="@{/couriers/register}" th:object="${courierRequest}" method="post">
+    <label for="name">Name:</label>
+    <input type="text" id="name" th:field="*{name}"/><br/>
+
+    <label for="surname">Surname:</label>
+    <input type="text" id="surname" th:field="*{surname}"/><br/>
+
+    <label for="login">Login:</label>
+    <input type="text" id="login" th:field="*{login}"/><br/>
+
+    <label for="password">Password:</label>
+    <input type="password" id="password" th:field="*{password}"/><br/>
+
+    <input type="hidden" th:field="*{role}"/>
+
+    <button type="submit">Register</button>
+</form>
+<div th:if="${message}">
+    <p th:text="${message}"></p>
+</div>
+</body>
+</html>

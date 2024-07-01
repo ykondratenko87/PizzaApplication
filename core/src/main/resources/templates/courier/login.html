@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login Courier</title>
+</head>
+<body>
+<h1>Login Courier</h1>
+<form th:action="@{/couriers/login}" th:object="${courierRequest}" method="post">
+    <label for="login">Login:</label>
+    <input type="text" id="login" th:field="*{login}"/><br/>
+
+    <label for="password">Password:</label>
+    <input type="password" id="password" th:field="*{password}"/><br/>
+
+    <button type="submit">Login</button>
+</form>
+<div th:if="${courier}">
+    <p>Welcome, <span th:text="${courier.name}"></span>!</p>
+</div>
+</body>
+</html>

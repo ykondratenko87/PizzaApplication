@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Deliver Order</title>
+</head>
+<body>
+<h1>Deliver Order</h1>
+<form th:action="@{/couriers/deliver}" method="post">
+    <label for="orderId">Order ID:</label>
+    <input type="text" id="orderId" name="orderId"/><br/>
+
+    <label for="courierId">Courier ID:</label>
+    <input type="text" id="courierId" name="courierId"/><br/>
+
+    <button type="submit">Deliver</button>
+</form>
+<div th:if="${message}">
+    <p th:text="${message}"></p>
+</div>
+</body>
+</html>

@@ -10,8 +10,9 @@
     </appender>
 
     <root level="info">
-        <appender-ref ref="Console"/>
+        <appender-ref ref="Console" />
     </root>
 </configuration>
+
         <!--Документация к логбэк-->
         <!--https://logback.qos.ch/manual/encoders.html-->

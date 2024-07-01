@@ -6,6 +6,7 @@ import by.tms.pizzaapp.mapper.UserRegistrationMapper;
 import by.tms.pizzaapp.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserRegistrationMapper userRegistrationMapper;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public UserResponse registerUser(UserRegistrationRequest userRequest) {
@@ -26,6 +28,7 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("User with this login already exists");
         }
         User user = userRegistrationMapper.toEntity(userRequest);
+        user.setPassword(passwordEncoder.encode(user.getPassword())); // Encrypt password
         if (userRepository.count() == 0) {
             user.setRole(UserRole.ADMIN);
         } else {
@@ -40,7 +43,7 @@ public class UserServiceImpl implements UserService {
         Optional<User> optionalUser = userRepository.findByLogin(userLoginRequest.getLogin());
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
-            if (userLoginRequest.getPassword().equals(user.getPassword())) {
+            if (passwordEncoder.matches(userLoginRequest.getPassword(), user.getPassword())) { // Validate password
                 return userRegistrationMapper.toResponse(user);
             } else {
                 throw new IllegalArgumentException("Invalid password");
@@ -90,7 +93,7 @@ public class UserServiceImpl implements UserService {
         existingUser.setName(userRequest.getName());
         existingUser.setSurname(userRequest.getSurname());
         existingUser.setLogin(userRequest.getLogin());
-        existingUser.setPassword(userRequest.getPassword());
+        existingUser.setPassword(passwordEncoder.encode(userRequest.getPassword())); // Encrypt password
         User updatedUser = userRepository.save(existingUser);
         return userRegistrationMapper.toResponse(updatedUser);
     }

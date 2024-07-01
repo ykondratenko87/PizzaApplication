@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,6 +32,7 @@ public class IngredientController {
     @Operation(summary = "Create new ingredient", description = "Добавить новый ингредиент")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAuthority('ADMIN')")
     public IngredientResponse createIngredient(@Valid @RequestBody IngredientRequest ingredientRequest) {
         log.info("Creating new ingredient: {}", ingredientRequest);
         return ingredientService.createIngredient(ingredientRequest);
@@ -39,6 +41,7 @@ public class IngredientController {
     @Operation(summary = "Delete ingredient by ID", description = "Удалить ингредиент")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAuthority('ADMIN')")
     public void deleteIngredientById(@PathVariable Long id) {
         log.info("Deleting ingredient with id: {}", id);
         ingredientService.deleteIngredientById(id);
@@ -47,6 +50,7 @@ public class IngredientController {
     @Operation(summary = "Update ingredient by ID", description = "Обновить ингредиент")
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAuthority('ADMIN')")
     public IngredientResponse updateIngredientById(@PathVariable Long id, @Valid @RequestBody IngredientRequest ingredientRequest) {
         log.info("Updating ingredient with id: {}", id);
         return ingredientService.updateIngredientById(id, ingredientRequest);

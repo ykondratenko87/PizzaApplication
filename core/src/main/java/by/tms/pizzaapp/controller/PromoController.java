@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -21,6 +22,7 @@ public class PromoController {
     @Operation(summary = "Add promo", description = "Добавляет промокод")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAuthority('ADMIN')")
     public PromoResponse addPromo(@Valid @RequestBody PromoRequest promoRequest) {
         log.info("Add promo: {}", promoRequest);
         return promoService.addPromo(promoRequest);
@@ -29,6 +31,7 @@ public class PromoController {
     @Operation(summary = "Delete promo", description = "Удаляет промокод")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAuthority('ADMIN')")
     public void deletePromo(@PathVariable Long id) {
         log.info("Delete promo with id: {}", id);
         promoService.deletePromo(id);

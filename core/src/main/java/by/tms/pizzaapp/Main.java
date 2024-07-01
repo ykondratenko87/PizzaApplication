@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @OpenAPIDefinition(info = @Info(title = "PizzaApplication", version = "1.0.0", contact = @Contact(name = "Yuri", email = "y.kondratenko87@gmail.com")))
 @SpringBootApplication
-@EnableJpaRepositories("by.tms.pizzaapp.repository")
+@EnableJpaRepositories
 @EnableTransactionManagement
 @EnableScheduling
 public class Main {

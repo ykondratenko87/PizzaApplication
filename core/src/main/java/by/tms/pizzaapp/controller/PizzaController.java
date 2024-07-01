@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -45,6 +46,7 @@ public class PizzaController {
     @Operation(summary = "createPizza", description = "Добавить новую пиццу")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAuthority('ADMIN')")
     public PizzaResponse createPizza(@Valid @RequestBody PizzaRequest pizzaRequest) {
         log.info("Creating new pizza with data: {}", pizzaRequest);
         return pizzaService.createPizza(pizzaRequest);
@@ -53,6 +55,7 @@ public class PizzaController {
     @Operation(summary = "deletePizza", description = "Удалить пиццу")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Void> deletePizza(@PathVariable long id) {
         log.info("Deleting pizza with id: {}", id);
         pizzaService.deletePizzaById(id);
@@ -62,6 +65,7 @@ public class PizzaController {
     @Operation(summary = "updatePizza", description = "Обновить пиццу")
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAuthority('ADMIN')")
     public PizzaResponse updatePizza(@PathVariable long id, @Valid @RequestBody PizzaRequest pizzaRequest) {
         log.info("Updating pizza with id: {} and data: {}", id, pizzaRequest);
         return pizzaService.updatePizza(id, pizzaRequest);

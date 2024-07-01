@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="1" author="kondratenko">
+        <createTable tableName="users" schemaName="pizzaapp">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="surname" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="login" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="password" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role" type="VARCHAR(255)"/>
+        </createTable>
+
+        <createTable tableName="review" schemaName="pizzaapp">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="description" type="TEXT"/>
+            <column name="pizza_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="promo" schemaName="pizzaapp">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="pizza" schemaName="pizzaapp">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="description" type="TEXT"/>
+            <column name="price" type="DOUBLE"/>
+            <column name="quantity" type="INT"/>
+        </createTable>
+
+        <createTable tableName="orders" schemaName="pizzaapp">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="status" type="VARCHAR(255)"/>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="address" type="VARCHAR(255)"/>
+            <column name="total_price" type="DOUBLE"/>
+            <column name="order_date" type="DATE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="courier_id" type="BIGINT"/>
+        </createTable>
+
+        <createTable tableName="ingredients" schemaName="pizzaapp">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="price" type="DOUBLE"/>
+            <column name="portion" type="INT"/>
+        </createTable>
+
+        <createTable tableName="couriers" schemaName="pizzaapp">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="surname" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="login" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="password" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="custom_pizzas" schemaName="pizzaapp">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="count" type="BIGINT"/>
+            <column name="total_sum" type="DOUBLE"/>
+            <column name="user_id" type="BIGINT"/>
+        </createTable>
+
+        <createTable tableName="baskets" schemaName="pizzaapp">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="count" type="BIGINT"/>
+            <column name="total_price" type="DOUBLE"/>
+            <column name="user_id" type="BIGINT"/>
+        </createTable>
+
+        <!-- Relation Tables -->
+        <createTable tableName="pizza_ingredients" schemaName="pizzaapp">
+            <column name="pizza_id" type="BIGINT"/>
+            <column name="ingredient_id" type="BIGINT"/>
+        </createTable>
+
+        <createTable tableName="order_pizzas" schemaName="pizzaapp">
+            <column name="order_id" type="BIGINT"/>
+            <column name="pizza_id" type="BIGINT"/>
+        </createTable>
+
+        <createTable tableName="basket_pizzas" schemaName="pizzaapp">
+            <column name="basket_id" type="BIGINT"/>
+            <column name="pizza_id" type="BIGINT"/>
+        </createTable>
+
+        <createTable tableName="basket_orders" schemaName="pizzaapp">
+            <column name="basket_id" type="BIGINT"/>
+            <column name="order_id" type="BIGINT"/>
+        </createTable>
+
+        <createTable tableName="basket_custom_pizzas" schemaName="pizzaapp">
+            <column name="basket_id" type="BIGINT"/>
+            <column name="custom_pizza_id" type="BIGINT"/>
+        </createTable>
+
+        <createTable tableName="custom_pizza_ingredients" schemaName="pizzaapp">
+            <column name="custom_pizza_id" type="BIGINT"/>
+            <column name="ingredient_id" type="BIGINT"/>
+        </createTable>
+
+        <!-- Foreign Keys -->
+        <addForeignKeyConstraint baseTableSchemaName="pizzaapp" baseTableName="review" baseColumnNames="pizza_id" constraintName="fk_review_pizza_id" referencedTableSchemaName="pizzaapp" referencedTableName="pizza" referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableSchemaName="pizzaapp" baseTableName="orders" baseColumnNames="user_id" constraintName="fk_orders_user_id" referencedTableSchemaName="pizzaapp" referencedTableName="users" referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableSchemaName="pizzaapp" baseTableName="orders" baseColumnNames="courier_id" constraintName="fk_orders_courier_id" referencedTableSchemaName="pizzaapp" referencedTableName="couriers" referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableSchemaName="pizzaapp" baseTableName="custom_pizzas" baseColumnNames="user_id" constraintName="fk_custom_pizzas_user_id" referencedTableSchemaName="pizzaapp" referencedTableName="users" referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableSchemaName="pizzaapp" baseTableName="baskets" baseColumnNames="user_id" constraintName="fk_baskets_user_id" referencedTableSchemaName="pizzaapp" referencedTableName="users" referencedColumnNames="id"/>
+
+        <!-- Composite Foreign Keys -->
+        <addForeignKeyConstraint baseTableSchemaName="pizzaapp" baseTableName="pizza_ingredients" baseColumnNames="pizza_id" constraintName="fk_pizza_ingredients_pizza_id" referencedTableSchemaName="pizzaapp" referencedTableName="pizza" referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableSchemaName="pizzaapp" baseTableName="pizza_ingredients" baseColumnNames="ingredient_id" constraintName="fk_pizza_ingredients_ingredient_id" referencedTableSchemaName="pizzaapp" referencedTableName="ingredients" referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableSchemaName="pizzaapp" baseTableName="order_pizzas" baseColumnNames="order_id" constraintName="fk_order_pizzas_order_id" referencedTableSchemaName="pizzaapp" referencedTableName="orders" referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableSchemaName="pizzaapp" baseTableName="order_pizzas" baseColumnNames="pizza_id" constraintName="fk_order_pizzas_pizza_id" referencedTableSchemaName="pizzaapp" referencedTableName="pizza" referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableSchemaName="pizzaapp" baseTableName="basket_pizzas" baseColumnNames="basket_id" constraintName="fk_basket_pizzas_basket_id" referencedTableSchemaName="pizzaapp" referencedTableName="baskets" referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableSchemaName="pizzaapp" baseTableName="basket_pizzas" baseColumnNames="pizza_id" constraintName="fk_basket_pizzas_pizza_id" referencedTableSchemaName="pizzaapp" referencedTableName="pizza" referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableSchemaName="pizzaapp" baseTableName="basket_orders" baseColumnNames="basket_id" constraintName="fk_basket_orders_basket_id" referencedTableSchemaName="pizzaapp" referencedTableName="baskets" referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableSchemaName="pizzaapp" baseTableName="basket_orders" baseColumnNames="order_id" constraintName="fk_basket_orders_order_id" referencedTableSchemaName="pizzaapp" referencedTableName="orders" referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableSchemaName="pizzaapp" baseTableName="basket_custom_pizzas" baseColumnNames="basket_id" constraintName="fk_basket_custom_pizzas_basket_id" referencedTableSchemaName="pizzaapp" referencedTableName="baskets" referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableSchemaName="pizzaapp" baseTableName="basket_custom_pizzas" baseColumnNames="custom_pizza_id" constraintName="fk_basket_custom_pizzas_custom_pizza_id" referencedTableSchemaName="pizzaapp" referencedTableName="custom_pizzas" referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableSchemaName="pizzaapp" baseTableName="custom_pizza_ingredients" baseColumnNames="custom_pizza_id" constraintName="fk_custom_pizza_ingredients_custom_pizza_id" referencedTableSchemaName="pizzaapp" referencedTableName="custom_pizzas" referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableSchemaName="pizzaapp" baseTableName="custom_pizza_ingredients" baseColumnNames="ingredient_id" constraintName="fk_custom_pizza_ingredients_ingredient_id" referencedTableSchemaName="pizzaapp" referencedTableName="ingredients" referencedColumnNames="id"/>
+
+    </changeSet>
+</databaseChangeLog>

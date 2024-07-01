@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -40,6 +41,7 @@ public class UserController {
     @Operation(summary = "getAllUsers", description = "Получить всех пользователей")
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAuthority('ADMIN')")
     public List<UserResponse> getAllUsers() {
         log.info("Fetching all users");
         return userService.getAllUsers();
@@ -48,6 +50,7 @@ public class UserController {
     @Operation(summary = "getAllUsers with pagination", description = "Получить всех пользователей с пагинацией")
     @GetMapping("/paged")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Page<UserResponse> getAllUsersWithPagination(Pageable pageable) {
         log.info("Fetching all users with pagination");
         return userService.getAllUsersWithPagination(pageable);
@@ -56,6 +59,7 @@ public class UserController {
     @Operation(summary = "getUserById", description = "Получить пользователя по ID")
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAuthority('ADMIN')")
     public UserResponse getUserById(@PathVariable Long id) {
         log.info("Fetching user with id: {}", id);
         return userService.getUserById(id);
@@ -64,6 +68,7 @@ public class UserController {
     @Operation(summary = "deleteUserById", description = "Удалить пользователя по ID")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAuthority('ADMIN')")
     public void deleteUserById(@PathVariable Long id) {
         log.info("Deleting user with id: {}", id);
         userService.deleteUserById(id);
@@ -72,6 +77,7 @@ public class UserController {
     @Operation(summary = "updateUser", description = "Обновить пользователя")
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAuthority('ADMIN')")
     public UserResponse updateUser(@PathVariable Long id, @Valid @RequestBody UserRegistrationRequest userRequest) {
         log.info("Updating user with id: {}", id);
         return userService.updateUser(id, userRequest);
@@ -80,6 +86,7 @@ public class UserController {
     @Operation(summary = "getUserByLogin", description = "Получить пользователя по Логину")
     @GetMapping("/login/{login}")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAuthority('ADMIN')")
     public UserResponse getUserByLogin(@PathVariable String login) {
         log.info("Fetching user by login: {}", login);
         return userService.getUserByLogin(login);

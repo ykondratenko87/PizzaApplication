@@ -5,6 +5,7 @@ import by.tms.pizzaapp.entity.ingredient.Ingredient;
 import by.tms.pizzaapp.mapper.IngredientMapper;
 import by.tms.pizzaapp.repository.IngredientRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 @RequiredArgsConstructor
+@CacheConfig(cacheNames = "ingredients")
 public class IngredientServiceImpl implements IngredientService {
     private final IngredientRepository ingredientRepository;
     private final IngredientMapper ingredientMapper;

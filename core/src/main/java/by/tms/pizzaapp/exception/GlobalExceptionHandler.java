@@ -14,13 +14,13 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ApplicationExceptions.UserNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public String handleUserNotFoundException(ApplicationExceptions.UserNotFoundException e) {
-        return e.getMessage();  // Возвращает сообщение об ошибке при отсутствии пользователя
+        return e.getMessage();
     }
 
     @ExceptionHandler(ApplicationExceptions.PizzaNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public String handlePizzaNotFoundException(ApplicationExceptions.PizzaNotFoundException e) {
-        return e.getMessage();  // Возвращает сообщение об ошибке при отсутствии пиццы
+        return e.getMessage();
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -28,7 +28,7 @@ public class GlobalExceptionHandler {
     public String handleValidationException(MethodArgumentNotValidException e) {
         return e.getBindingResult().getFieldErrors().stream()
                 .map(fieldError -> fieldError.getField() + ": " + fieldError.getDefaultMessage())
-                .collect(Collectors.joining(", "));  // Возвращает ошибки валидации в виде строки
+                .collect(Collectors.joining(", "));
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
@@ -36,18 +36,18 @@ public class GlobalExceptionHandler {
     public String handleConstraintViolationException(ConstraintViolationException e) {
         return e.getConstraintViolations().stream()
                 .map(constraintViolation -> constraintViolation.getPropertyPath() + ": " + constraintViolation.getMessage())
-                .collect(Collectors.joining(", "));  // Возвращает нарушения ограничений валидации в виде строки
+                .collect(Collectors.joining(", "));
     }
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public String handleGeneralException(Exception e) {
-        return e.getMessage();  // Возвращает общее сообщение об ошибке для всех остальных исключений
+        return e.getMessage();
     }
 
     @ExceptionHandler(NoSuchElementException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public String handlePromoNotFoundException(NoSuchElementException e) {
-        return e.getMessage();  // Возвращает сообщение об ошибке при отсутствии промо
+        return e.getMessage();
     }
 }

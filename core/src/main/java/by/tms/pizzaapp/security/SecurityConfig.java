@@ -36,7 +36,8 @@ public class SecurityConfig {
         return (web) -> web.ignoring()
                 .requestMatchers("/users/register")
                 .requestMatchers("/users/login")
-                .requestMatchers("/users/paged");
+                .requestMatchers("/users/paged")
+                .requestMatchers("/custom-pizzas");
     }
 
     @Bean
@@ -46,9 +47,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/").permitAll()
                         .requestMatchers("/swagger-ui/**").hasAuthority("ADMIN")
-                        .requestMatchers("/baskets/**").permitAll()
                         .requestMatchers("/review/**").permitAll()
-                        .requestMatchers("/custom_pizzas/**").permitAll()
                         .requestMatchers("/couriers/**").permitAll()
                         .requestMatchers("/ingredients/**").permitAll()
                         .requestMatchers("/pizzas/**").permitAll()

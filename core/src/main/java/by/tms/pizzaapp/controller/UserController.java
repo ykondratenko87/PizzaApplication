@@ -50,7 +50,6 @@ public class UserController {
     @Operation(summary = "getAllUsers with pagination", description = "Получить всех пользователей с пагинацией")
     @GetMapping("/paged")
     @ResponseStatus(HttpStatus.OK)
-    @PreAuthorize("hasAuthority('ADMIN')")
     public Page<UserResponse> getAllUsersWithPagination(Pageable pageable) {
         log.info("Fetching all users with pagination");
         return userService.getAllUsersWithPagination(pageable);

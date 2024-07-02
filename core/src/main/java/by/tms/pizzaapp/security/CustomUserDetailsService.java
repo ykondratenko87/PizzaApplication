@@ -3,9 +3,7 @@ package by.tms.pizzaapp.security;
 import by.tms.pizzaapp.entity.user.User;
 import by.tms.pizzaapp.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.core.userdetails.*;
 import org.springframework.stereotype.Service;
 
 @Service

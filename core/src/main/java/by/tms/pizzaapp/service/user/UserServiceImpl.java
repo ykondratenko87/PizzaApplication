@@ -28,7 +28,7 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("User with this login already exists");
         }
         User user = userRegistrationMapper.toEntity(userRequest);
-        user.setPassword(passwordEncoder.encode(user.getPassword())); // Encrypt password
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         if (userRepository.count() == 0) {
             user.setRole(UserRole.ADMIN);
         } else {
@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserService {
         Optional<User> optionalUser = userRepository.findByLogin(userLoginRequest.getLogin());
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
-            if (passwordEncoder.matches(userLoginRequest.getPassword(), user.getPassword())) { // Validate password
+            if (passwordEncoder.matches(userLoginRequest.getPassword(), user.getPassword())) {
                 return userRegistrationMapper.toResponse(user);
             } else {
                 throw new IllegalArgumentException("Invalid password");
@@ -93,7 +93,7 @@ public class UserServiceImpl implements UserService {
         existingUser.setName(userRequest.getName());
         existingUser.setSurname(userRequest.getSurname());
         existingUser.setLogin(userRequest.getLogin());
-        existingUser.setPassword(passwordEncoder.encode(userRequest.getPassword())); // Encrypt password
+        existingUser.setPassword(passwordEncoder.encode(userRequest.getPassword()));
         User updatedUser = userRepository.save(existingUser);
         return userRegistrationMapper.toResponse(updatedUser);
     }

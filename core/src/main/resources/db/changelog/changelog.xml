@@ -153,30 +153,75 @@
         </createTable>
 
         <!-- Foreign Keys -->
-        <addForeignKeyConstraint baseTableSchemaName="pizzaapp" baseTableName="review" baseColumnNames="pizza_id" constraintName="fk_review_pizza_id" referencedTableSchemaName="pizzaapp" referencedTableName="pizza" referencedColumnNames="id"/>
-        <addForeignKeyConstraint baseTableSchemaName="pizzaapp" baseTableName="orders" baseColumnNames="user_id" constraintName="fk_orders_user_id" referencedTableSchemaName="pizzaapp" referencedTableName="users" referencedColumnNames="id"/>
-        <addForeignKeyConstraint baseTableSchemaName="pizzaapp" baseTableName="orders" baseColumnNames="courier_id" constraintName="fk_orders_courier_id" referencedTableSchemaName="pizzaapp" referencedTableName="couriers" referencedColumnNames="id"/>
-        <addForeignKeyConstraint baseTableSchemaName="pizzaapp" baseTableName="custom_pizzas" baseColumnNames="user_id" constraintName="fk_custom_pizzas_user_id" referencedTableSchemaName="pizzaapp" referencedTableName="users" referencedColumnNames="id"/>
-        <addForeignKeyConstraint baseTableSchemaName="pizzaapp" baseTableName="baskets" baseColumnNames="user_id" constraintName="fk_baskets_user_id" referencedTableSchemaName="pizzaapp" referencedTableName="users" referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableSchemaName="pizzaapp" baseTableName="review" baseColumnNames="pizza_id"
+                                 constraintName="fk_review_pizza_id" referencedTableSchemaName="pizzaapp"
+                                 referencedTableName="pizza" referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableSchemaName="pizzaapp" baseTableName="orders" baseColumnNames="user_id"
+                                 constraintName="fk_orders_user_id" referencedTableSchemaName="pizzaapp"
+                                 referencedTableName="users" referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableSchemaName="pizzaapp" baseTableName="orders" baseColumnNames="courier_id"
+                                 constraintName="fk_orders_courier_id" referencedTableSchemaName="pizzaapp"
+                                 referencedTableName="couriers" referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableSchemaName="pizzaapp" baseTableName="custom_pizzas" baseColumnNames="user_id"
+                                 constraintName="fk_custom_pizzas_user_id" referencedTableSchemaName="pizzaapp"
+                                 referencedTableName="users" referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableSchemaName="pizzaapp" baseTableName="baskets" baseColumnNames="user_id"
+                                 constraintName="fk_baskets_user_id" referencedTableSchemaName="pizzaapp"
+                                 referencedTableName="users" referencedColumnNames="id"/>
 
         <!-- Composite Foreign Keys -->
-        <addForeignKeyConstraint baseTableSchemaName="pizzaapp" baseTableName="pizza_ingredients" baseColumnNames="pizza_id" constraintName="fk_pizza_ingredients_pizza_id" referencedTableSchemaName="pizzaapp" referencedTableName="pizza" referencedColumnNames="id"/>
-        <addForeignKeyConstraint baseTableSchemaName="pizzaapp" baseTableName="pizza_ingredients" baseColumnNames="ingredient_id" constraintName="fk_pizza_ingredients_ingredient_id" referencedTableSchemaName="pizzaapp" referencedTableName="ingredients" referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableSchemaName="pizzaapp" baseTableName="pizza_ingredients"
+                                 baseColumnNames="pizza_id" constraintName="fk_pizza_ingredients_pizza_id"
+                                 referencedTableSchemaName="pizzaapp" referencedTableName="pizza"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableSchemaName="pizzaapp" baseTableName="pizza_ingredients"
+                                 baseColumnNames="ingredient_id" constraintName="fk_pizza_ingredients_ingredient_id"
+                                 referencedTableSchemaName="pizzaapp" referencedTableName="ingredients"
+                                 referencedColumnNames="id"/>
 
-        <addForeignKeyConstraint baseTableSchemaName="pizzaapp" baseTableName="order_pizzas" baseColumnNames="order_id" constraintName="fk_order_pizzas_order_id" referencedTableSchemaName="pizzaapp" referencedTableName="orders" referencedColumnNames="id"/>
-        <addForeignKeyConstraint baseTableSchemaName="pizzaapp" baseTableName="order_pizzas" baseColumnNames="pizza_id" constraintName="fk_order_pizzas_pizza_id" referencedTableSchemaName="pizzaapp" referencedTableName="pizza" referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableSchemaName="pizzaapp" baseTableName="order_pizzas" baseColumnNames="order_id"
+                                 constraintName="fk_order_pizzas_order_id" referencedTableSchemaName="pizzaapp"
+                                 referencedTableName="orders" referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableSchemaName="pizzaapp" baseTableName="order_pizzas" baseColumnNames="pizza_id"
+                                 constraintName="fk_order_pizzas_pizza_id" referencedTableSchemaName="pizzaapp"
+                                 referencedTableName="pizza" referencedColumnNames="id"/>
 
-        <addForeignKeyConstraint baseTableSchemaName="pizzaapp" baseTableName="basket_pizzas" baseColumnNames="basket_id" constraintName="fk_basket_pizzas_basket_id" referencedTableSchemaName="pizzaapp" referencedTableName="baskets" referencedColumnNames="id"/>
-        <addForeignKeyConstraint baseTableSchemaName="pizzaapp" baseTableName="basket_pizzas" baseColumnNames="pizza_id" constraintName="fk_basket_pizzas_pizza_id" referencedTableSchemaName="pizzaapp" referencedTableName="pizza" referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableSchemaName="pizzaapp" baseTableName="basket_pizzas"
+                                 baseColumnNames="basket_id" constraintName="fk_basket_pizzas_basket_id"
+                                 referencedTableSchemaName="pizzaapp" referencedTableName="baskets"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableSchemaName="pizzaapp" baseTableName="basket_pizzas" baseColumnNames="pizza_id"
+                                 constraintName="fk_basket_pizzas_pizza_id" referencedTableSchemaName="pizzaapp"
+                                 referencedTableName="pizza" referencedColumnNames="id"/>
 
-        <addForeignKeyConstraint baseTableSchemaName="pizzaapp" baseTableName="basket_orders" baseColumnNames="basket_id" constraintName="fk_basket_orders_basket_id" referencedTableSchemaName="pizzaapp" referencedTableName="baskets" referencedColumnNames="id"/>
-        <addForeignKeyConstraint baseTableSchemaName="pizzaapp" baseTableName="basket_orders" baseColumnNames="order_id" constraintName="fk_basket_orders_order_id" referencedTableSchemaName="pizzaapp" referencedTableName="orders" referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableSchemaName="pizzaapp" baseTableName="basket_orders"
+                                 baseColumnNames="basket_id" constraintName="fk_basket_orders_basket_id"
+                                 referencedTableSchemaName="pizzaapp" referencedTableName="baskets"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableSchemaName="pizzaapp" baseTableName="basket_orders" baseColumnNames="order_id"
+                                 constraintName="fk_basket_orders_order_id" referencedTableSchemaName="pizzaapp"
+                                 referencedTableName="orders" referencedColumnNames="id"/>
 
-        <addForeignKeyConstraint baseTableSchemaName="pizzaapp" baseTableName="basket_custom_pizzas" baseColumnNames="basket_id" constraintName="fk_basket_custom_pizzas_basket_id" referencedTableSchemaName="pizzaapp" referencedTableName="baskets" referencedColumnNames="id"/>
-        <addForeignKeyConstraint baseTableSchemaName="pizzaapp" baseTableName="basket_custom_pizzas" baseColumnNames="custom_pizza_id" constraintName="fk_basket_custom_pizzas_custom_pizza_id" referencedTableSchemaName="pizzaapp" referencedTableName="custom_pizzas" referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableSchemaName="pizzaapp" baseTableName="basket_custom_pizzas"
+                                 baseColumnNames="basket_id" constraintName="fk_basket_custom_pizzas_basket_id"
+                                 referencedTableSchemaName="pizzaapp" referencedTableName="baskets"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableSchemaName="pizzaapp" baseTableName="basket_custom_pizzas"
+                                 baseColumnNames="custom_pizza_id"
+                                 constraintName="fk_basket_custom_pizzas_custom_pizza_id"
+                                 referencedTableSchemaName="pizzaapp" referencedTableName="custom_pizzas"
+                                 referencedColumnNames="id"/>
 
-        <addForeignKeyConstraint baseTableSchemaName="pizzaapp" baseTableName="custom_pizza_ingredients" baseColumnNames="custom_pizza_id" constraintName="fk_custom_pizza_ingredients_custom_pizza_id" referencedTableSchemaName="pizzaapp" referencedTableName="custom_pizzas" referencedColumnNames="id"/>
-        <addForeignKeyConstraint baseTableSchemaName="pizzaapp" baseTableName="custom_pizza_ingredients" baseColumnNames="ingredient_id" constraintName="fk_custom_pizza_ingredients_ingredient_id" referencedTableSchemaName="pizzaapp" referencedTableName="ingredients" referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableSchemaName="pizzaapp" baseTableName="custom_pizza_ingredients"
+                                 baseColumnNames="custom_pizza_id"
+                                 constraintName="fk_custom_pizza_ingredients_custom_pizza_id"
+                                 referencedTableSchemaName="pizzaapp" referencedTableName="custom_pizzas"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableSchemaName="pizzaapp" baseTableName="custom_pizza_ingredients"
+                                 baseColumnNames="ingredient_id"
+                                 constraintName="fk_custom_pizza_ingredients_ingredient_id"
+                                 referencedTableSchemaName="pizzaapp" referencedTableName="ingredients"
+                                 referencedColumnNames="id"/>
 
     </changeSet>
 </databaseChangeLog>

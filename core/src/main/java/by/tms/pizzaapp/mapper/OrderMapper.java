@@ -15,8 +15,7 @@ public interface OrderMapper {
 
     @Mapping(source = "user.id", target = "userId")
     @Mapping(source = "pizzas", target = "pizzas")
-        // Добавьте это отображение
     OrderResponse toResponse(Order order);
 
-    List<PizzaResponse> pizzasToPizzaResponses(List<Pizza> pizzas);  // Добавьте это
+    List<PizzaResponse> pizzasToPizzaResponses(List<Pizza> pizzas);
 }
